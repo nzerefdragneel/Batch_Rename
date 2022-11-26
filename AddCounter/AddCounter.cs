@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Text;
 using Contract;
 namespace AddCounter
@@ -11,7 +12,9 @@ namespace AddCounter
         public int CounterFile { get; set; }
         public int CounterFolder { get; set; }
         public string Name => "AddCounter";
-        public void EditRule(string data) { }
+        public void EditRule(string data) {
+            Kind = data;
+        }
         public object Clone()
         {
             throw new NotImplementedException();
@@ -42,6 +45,7 @@ namespace AddCounter
         }
         public string Rename(string origin, string type)
         {
+            Debug.WriteLine("add counter!!!!!!!!");
 
             int index = origin.LastIndexOf('.');
             string name = "", extension = "";

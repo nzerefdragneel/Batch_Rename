@@ -48,6 +48,7 @@ namespace Batch_Rename
         {
             InitializeComponent();  
         }
+        string tab_control ;
         static Dictionary<string, IRule> _prototypes = new Dictionary<string, IRule>();
 
         ObservableCollection<FileIOS> _fileList=new ObservableCollection<FileIOS>();
@@ -147,6 +148,7 @@ namespace Batch_Rename
             {
                 "Change Extension","Add Case","Add Counter","Add Prefix","Add Suffix","Trim"
             };
+            tab_control = "File";
 
             deleteDefault();
             LoadRuleFromFile();
@@ -391,34 +393,45 @@ namespace Batch_Rename
             {
                 if (rule.Name == parent.Name)
                 {
-
+                    if (rule.Name == "AddCounter") rule.reset();
                     rules.Remove(rule);
                     break;
                 }
             }
-            foreach ( var file in _fileList)
-            {
-                file.NewFilename = file.Filename;
-                foreach(var rule in rules)
-                {
-                    file.NewFilename = rule?.Rename(file.NewFilename, "File")!;
-                }
-            }
-            foreach (var file in _folderList)
-            {
-                file.NewFilename = file.Filename;
-                foreach (var rule in rules)
-                {
-                    file.NewFilename = rule?.Rename(file.NewFilename, "Folder")!;
-                }
-            }
+            reviewAllruleChange();
             Debug.WriteLine($"{parent.Name}");
             Debug.WriteLine("delete___________");
            ((RibbonGroupBoxWrapPanel)parent.Parent).Children.Remove(parent);
             
         }
     
-
+        private void reviewAllruleChange()
+        {
+            if (Tab1.IsSelected)
+            {
+                for (int i = 0; i < _fileList.Count; i++)
+                {
+                    _fileList[i].NewFilename = _fileList[i].Filename;
+                    foreach (var rule in rules)
+                    {
+                        Debug.WriteLine(rule.Name);
+                        _fileList[i].NewFilename = rule?.Rename(_fileList[i].NewFilename, "File")!;
+                    }
+                     
+                }
+            }
+            else
+            {
+                for (int i = 0; i < _folderList.Count; i++)
+                {
+                    _folderList[i].NewFilename = _folderList[i].Filename;
+                    foreach (var rule in rules)
+                    {
+                        _folderList[i].NewFilename = rule?.Rename(_folderList[i].NewFilename, "Folder")!;
+                    }
+                }
+            }
+        }
         private void ChangeExtension_mouseDown(object sender, MouseButtonEventArgs e)
         {
 
@@ -450,6 +463,7 @@ namespace Batch_Rename
                         rule?.EditRule(data);
 
                 }
+
                 foreach (var file in _fileList)
                 {
                     file.NewFilename= file.Filename;
@@ -463,7 +477,15 @@ namespace Batch_Rename
 
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            if (tab_control == "File")
+            {
+                tab_control = "Folder";
+                reviewAllruleChange();
+            }
+            else { 
+                tab_control = "File";
+                reviewAllruleChange();
+            }
         }
         
         private void EditChangeExtension(object sender, RoutedEventArgs e)
@@ -536,6 +558,28 @@ namespace Batch_Rename
                 _fileList[i].NewFilename = newName;
             }
         }
+        private void reviewFile_folderNamebyOneRule(IRule? rule)
+        {
+            Debug.WriteLine(rule.Name.ToString());
+            if (Tab1.IsSelected)
+            {
+                for (int i = 0; i < _fileList.Count; i++)
+                {
+                    string newName = _fileList[i].NewFilename;
+                    newName = rule?.Rename(newName, "File")!;
+                    _fileList[i].NewFilename = newName;
+                }
+            }
+            else
+            {
+                for (int i = 0; i < _folderList.Count; i++)
+                {
+                    string newName = _folderList[i].NewFilename;
+                    newName = rule?.Rename(newName, "Folder")!;
+                    _folderList[i].NewFilename = newName;
+                }
+            }
+        }
         private void previewAfterAddRule(string line)
         {
             var rule = RuleFactory.Instance().Parse(line);
@@ -543,20 +587,7 @@ namespace Batch_Rename
             if (rule != null)
             {
                 rules.Add(rule);
-                Debug.WriteLine("____________________________");
-                Debug.WriteLine(rule.Name);
-                for (int i = 0; i < _fileList.Count; i++)
-                {
-                    string newName = _fileList[i].NewFilename;
-                    newName = rule?.Rename(newName,"File")!;
-                    _fileList[i].NewFilename = newName;
-                }
-                for (int i = 0; i < _folderList.Count; i++)
-                {
-                    string newName = _folderList[i].NewFilename;
-                    newName = rule?.Rename(newName, "Folder")!;
-                    _folderList[i].NewFilename = newName;
-                }
+                reviewFile_folderNamebyOneRule(rule);
             }
             
             

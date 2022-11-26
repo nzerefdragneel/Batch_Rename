@@ -5,7 +5,9 @@ namespace Trim
     class Trim: IRule
     {
        
-
+         public void reset()
+        {
+        }
         public string Name => "Trim";
 
         public object Clone()

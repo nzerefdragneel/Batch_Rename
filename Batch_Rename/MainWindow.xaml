@@ -377,7 +377,7 @@
                 </WrapPanel>
                 
                 <TabControl Grid.Row="0" Grid.Column="1" FontSize="15" SelectionChanged="TabControl_SelectionChanged" >
-                    <TabItem Header="Rename Files" Height="35" FontSize="20">
+                    <TabItem Header="Rename Files" Height="35" FontSize="20" Name="Tab1">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="35"></RowDefinition>

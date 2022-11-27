@@ -13,8 +13,12 @@ namespace AddCounter
         public int CounterFolder { get; set; }
         public string Name => "AddCounter";
         public void EditRule(string data) {
-            Kind = data;
+            var x = data.Split('?');
+            if (x[0] == "Kind") Kind = x[1];
+            if (x[0]=="Step") Step = int.Parse(x[1]);
+            if (x[0]=="NoDigits") NoDigits= int.Parse(x[1]);
         }
+     
         public object Clone()
         {
             throw new NotImplementedException();
@@ -37,6 +41,10 @@ namespace AddCounter
             return result;
         }
 
+        public string getData()
+        {
+            return Kind;
+        }
         public void reset()
         {
             this.CounterFile = 0;

@@ -5,7 +5,11 @@ namespace AddPrefix
     class AddPrefix : IRule
     {
         public string Prefix { get; set; }
-        
+
+        public string getData()
+        {
+            return Prefix;
+        }
         public void reset()
         {
             Prefix = "";

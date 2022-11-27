@@ -29,6 +29,7 @@
     <ProjectReference Include="..\AddCounter\AddCounter.csproj" />
     <ProjectReference Include="..\AddPrefix\AddPrefix.csproj" />
     <ProjectReference Include="..\AddSuffix\AddSuffix.csproj" />
+    <ProjectReference Include="..\ChangeCharacters\ChangeCharacters.csproj" />
     <ProjectReference Include="..\changeExtention\changeExtension.csproj" />
     <ProjectReference Include="..\Contract\Contract.csproj" />
     <ProjectReference Include="..\Trim\Trim.csproj" />

@@ -7,8 +7,12 @@ namespace changeExtension
     {
         public string Extension { get; set; }
 
+     
         public string Name => "ChangeExtension";
-
+            public string getData()
+        {
+            return Extension;
+        }
         public void EditRule(string extension)
         {
             Extension = extension;

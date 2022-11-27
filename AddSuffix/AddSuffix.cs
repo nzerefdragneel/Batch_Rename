@@ -4,8 +4,13 @@ namespace AddSuffix
 {
     class AddSuffix : IRule
     {
+        
         public string Suffix { get; set; }
 
+     public string getData()
+        {
+            return Suffix;
+        }
         public void reset()
         {
             Suffix= string.Empty;

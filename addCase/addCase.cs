@@ -9,9 +9,15 @@ namespace addCase
     class AddCase : IRule
     {
         private string @case;
+
+        public string getData()
+        {
+            return GetCase();
+        }
+
         public void reset()
         {
-            @case = "";
+            @case = "PascalCase";
         }
         public string GetCase()
         {
@@ -44,7 +50,8 @@ namespace addCase
             var thiscase= tokens[1];
 
             AddCase result = new AddCase();
-
+            SetCase("PascalCase");
+            @case = "PascalCase";
             return result;
         }
 

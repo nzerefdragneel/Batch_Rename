@@ -4,6 +4,7 @@ namespace Trim
 {
     class Trim: IRule
     {
+
        
          public void reset()
         {
@@ -36,6 +37,11 @@ namespace Trim
             else name = origin;
             origin =name.Trim()+ extension;
             return origin;
+        }
+
+        string IRule.getData()
+        {
+            throw new NotImplementedException();
         }
     }
 }

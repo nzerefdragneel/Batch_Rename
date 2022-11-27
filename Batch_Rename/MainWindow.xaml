@@ -42,7 +42,7 @@
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="300"></ColumnDefinition>
+                <ColumnDefinition Width="320"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <StackPanel Name="ControlChooseRule" Height="35" Background="#235295"  Orientation="Horizontal" Grid.Column="0" Grid.Row="0">
@@ -56,7 +56,8 @@
                         </DataTemplate>
                     </Fluent:ComboBox.ItemTemplate>
                 </Fluent:ComboBox>
-                <Button Grid.Column="1" Width="20" DockPanel.Dock="Right" Height="20" Margin="10,4,10,4" Background="Transparent" BorderThickness="0" Click="btnChooseRule">
+                <Button Grid.Column="1" Width="20" DockPanel.Dock="Right" Height="20" Margin="10,4,10,4" Background="Transparent" BorderThickness="0"
+                        Click="btnChooseRule">
                     <Image Source="Images/plus.png" RenderOptions.BitmapScalingMode="HighQuality"/>
                 </Button>
                 <Button Grid.Column="1" Width="20" DockPanel.Dock="Right" Height="20" Margin="10,4,10,4" Background="Transparent" BorderThickness="0" Click="ChooseRuleIsDown">
@@ -69,10 +70,10 @@
                     <Image Source="Images/download.png" RenderOptions.BitmapScalingMode="HighQuality"/>
                 </Button>
             </StackPanel>
-            <StackPanel Grid.Row="1" Grid.Column="0">
+            <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
 
-                <Fluent:ComboBox x:Name="cmbChoosePreset"  Width="151"  Margin="0 10 0 10"
-                         Background="#235295" Foreground="#235295" Text="Choose rule" Height="20" IsReadOnly="True">
+                <Fluent:ComboBox x:Name="cmbChoosePreset"  Width="151"  Margin="0 10 0 0"
+                         Background="#235295" Foreground="#235295" Text="Choose reset rule" Height="20" IsReadOnly="True">
                     <Fluent:ComboBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
@@ -81,8 +82,14 @@
                         </DataTemplate>
                     </Fluent:ComboBox.ItemTemplate>
                 </Fluent:ComboBox>
-
+                <Button Grid.Column="1" Width="20" DockPanel.Dock="Right" Height="20" Margin="10,4,10,4" Background="Transparent" BorderThickness="0" 
+                        Click="btnResetRule">
+                    <Image Source="Images/plus.png" RenderOptions.BitmapScalingMode="HighQuality"/>
+                </Button>
             </StackPanel>
+            <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Column="0" Grid.Row="2">
+                
+           
             <Fluent:RibbonGroupBoxWrapPanel x:Name="ListRuleGroupBox" HorizontalAlignment="Stretch"  Grid.Column="0" Grid.Row="2" Margin="10,0,0,0">
 
 
@@ -153,7 +160,7 @@
 
 
                     </Grid>
-                    <DockPanel x:Name="editAddCase" Grid.Row="1" Grid.ColumnSpan="3" Margin="10 0 0 0" Visibility="Collapsed">
+                    <DockPanel x:Name="editAddCase" Grid.Row="1" Grid.ColumnSpan="3" Margin="10 0 0 0" Visibility="Visible">
                         <TextBlock Text="Choose Case" Margin="0 15 10 10" FontSize="15" Foreground="white" Height="26"></TextBlock>
                         <Fluent:ComboBox x:Name="cmbAddCase"  Width="151" SelectionChanged="cmbchangedSelection"
                          Background="#235295" Foreground="#235295" Text="Choose Case" Height="24" IsReadOnly="True">
@@ -193,8 +200,8 @@
 
                     </Grid>
                     <StackPanel x:Name="editaddCounter" Grid.Row="1" Grid.ColumnSpan="3" Margin="10 0 0 0" Visibility="Visible">
-                        <DockPanel>
-                            <TextBlock Text="Number off digits" Margin="0 15 10 10" FontSize="15" Foreground="white" Height="26"></TextBlock>
+                        <DockPanel Visibility="Collapsed">
+                            <TextBlock Text="Number off digits"  Margin="0 15 10 10" FontSize="15" Foreground="white" Height="26"></TextBlock>
                             <Fluent:ComboBox x:Name="cmSelectcounter"    Margin="00,0,10,0"
                          Background="#235295" Foreground="#235295" Text="Digits" Height="24" IsReadOnly="True">
                                 <ComboBoxItem>Pascal case</ComboBoxItem>
@@ -207,10 +214,8 @@
                             <TextBlock Text="Choose Type" Margin="0 15 10 10" FontSize="15" Foreground="white" Height="26"></TextBlock>
                             <Fluent:ComboBox x:Name="cmbChooseType"    Margin="00,0,10,0"
                          Background="#235295" Foreground="#235295" Text="Type" Height="24" IsReadOnly="True">
-                                <ComboBoxItem>Pascal case</ComboBoxItem>
-                                <ComboBoxItem>Up case</ComboBoxItem>
-                                <ComboBoxItem>Lower case</ComboBoxItem>
-
+                                <ComboBoxItem IsSelected="True">Add on Prefix</ComboBoxItem>
+                                <ComboBoxItem>Add on Suffix</ComboBoxItem>
                             </Fluent:ComboBox>
                         </DockPanel>
                     </StackPanel>
@@ -266,7 +271,7 @@
                         </Button>
                     </Grid>
                     <DockPanel x:Name="editAddPrefix" Height="50" Grid.ColumnSpan="3" Margin="10 0 0 0" 
-                                   Visibility="Collapsed">
+                                   Visibility="Visible">
                         <TextBlock Text="Prefix" Margin="0 15 10 10" FontSize="15" Foreground="white" Height="26"></TextBlock>
                         <TextBox Name="textboxAddprefix" Height="22" Margin="0,0,20,0"
                                 HorizontalContentAlignment="Right"
@@ -277,7 +282,7 @@
 
                 </StackPanel>
 
-                <StackPanel x:Name="AddSuffix" MouseDown="ChangeExtension_mouseDown" Margin="10 0 10 0">
+                <StackPanel x:Name="ChangeCharacters" MouseDown="ChangeExtension_mouseDown" Margin="10 0 10 0">
                     <Grid Grid.Column="0" Grid.Row="1">
                         <Grid.ColumnDefinitions >
                             <ColumnDefinition Width="220"></ColumnDefinition>
@@ -287,8 +292,8 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30"></RowDefinition>
                         </Grid.RowDefinitions>
-                        <TextBlock Text="Add Suffix" DockPanel.Dock="Left" FontSize="20" Foreground="white" />
-                        <Button Grid.Column="2" Width="20" DockPanel.Dock="Right" Height="20" Margin="0,4,0,4" Background="Transparent" BorderThickness="0" Click="EditAddSuffix">
+                        <TextBlock Text="Change Characters" DockPanel.Dock="Left" FontSize="20" Foreground="white" />
+                        <Button Grid.Column="2" Width="20" DockPanel.Dock="Right" Height="20" Margin="0,4,0,4" Background="Transparent" BorderThickness="0" Click="EditChangeCharacters">
                             <Image Source="Images/download.png" RenderOptions.BitmapScalingMode="HighQuality"/>
                             <Button.ToolTip>
                                 <ToolTip Content="Move Rule To Bottom"/>
@@ -302,19 +307,75 @@
                         </Button>
                     </Grid>
 
-                    <DockPanel x:Name="editAddSuffix" Grid.ColumnSpan="3" Margin="10 0 0 0" Grid.Row="1" Visibility="Collapsed">
-                        <TextBlock Text="Suffix" Margin="15 0 10 10" FontSize="15" Foreground="white" Height="26"></TextBlock>
-                        <TextBox Name="textboxAddsuffix" Height="22" Margin="0,0,20,0" 
+                 
+                        <DockPanel x:Name="editOldCharacter"  Height="100" Grid.ColumnSpan="3" Margin="10 0 0 0" 
+                                   Visibility="Visible">
+                            <Grid>
+                                
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"></RowDefinition>
+                                    <RowDefinition Height="*"></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <DockPanel Grid.Row="0">
+                            <TextBlock Text="Old Characters" Margin="0 15 10 10" FontSize="15" Foreground="white" Height="26"></TextBlock>
+                            <TextBox Name="textboxOldCharacter" Height="22" Margin="0,0,20,0"
+                                HorizontalContentAlignment="Right"
+                                VerticalContentAlignment="Center" Foreground="White"
+                                     Background="#235295" TextChanged="_textboxReplace_TextChanged"
+                                     />
+                                </DockPanel>
+                                <DockPanel Grid.Row="1">
+                                    <TextBlock Text="New Characters" Margin="0 15 10 10" FontSize="15" Foreground="white" Height="26"></TextBlock>
+                            <TextBox Name="textboxNewCharacter" Height="22" Margin="0,0,20,0"
+                                HorizontalContentAlignment="Right"
+                                VerticalContentAlignment="Center" Foreground="White"
+                                     Background="#235295" TextChanged="_textboxReplace_TextChanged"
+                                     />
+                                </DockPanel>
+                            </Grid>
+                        </DockPanel>
+
+
+
+                    </StackPanel>
+                    <StackPanel x:Name="AddSuffix" MouseDown="ChangeExtension_mouseDown" Margin="10 0 10 0">
+                        <Grid Grid.Column="0" Grid.Row="1">
+                            <Grid.ColumnDefinitions >
+                                <ColumnDefinition Width="220"></ColumnDefinition>
+                                <ColumnDefinition Width="30"></ColumnDefinition>
+                                <ColumnDefinition Width="20"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="Add Suffix" DockPanel.Dock="Left" FontSize="20" Foreground="white" />
+                            <Button Grid.Column="2" Width="20" DockPanel.Dock="Right" Height="20" Margin="0,4,0,4" Background="Transparent" BorderThickness="0" Click="EditAddSuffix">
+                                <Image Source="Images/download.png" RenderOptions.BitmapScalingMode="HighQuality"/>
+                                <Button.ToolTip>
+                                    <ToolTip Content="Move Rule To Bottom"/>
+                                </Button.ToolTip>
+                            </Button>
+                            <Button Grid.Column="1" Width="20" DockPanel.Dock="Right" Height="20" Margin="0,4,0,4" Background="Transparent" BorderThickness="0" Click="deleteRule">
+                                <Image Source="Images/garbage.png" RenderOptions.BitmapScalingMode="HighQuality"/>
+                                <Button.ToolTip>
+                                    <ToolTip Content="Move Rule To Bottom"/>
+                                </Button.ToolTip>
+                            </Button>
+                        </Grid>
+
+                        <DockPanel x:Name="editAddSuffix" Grid.ColumnSpan="3" Margin="10 0 0 0" Grid.Row="1" Visibility="Visible">
+                            <TextBlock Text="Suffix" Margin="15 0 10 10" FontSize="15" Foreground="white" Height="26"></TextBlock>
+                            <TextBox Name="textboxAddsuffix" Height="22" Margin="0,0,20,0" 
                                 HorizontalContentAlignment="Right" Foreground="White"
                                 VerticalContentAlignment="Center"
                                      Background="#235295" TextChanged="_textboxReplace_TextChanged"
                                      />
-                    </DockPanel>
+                        </DockPanel>
 
 
-                </StackPanel>
-            </Fluent:RibbonGroupBoxWrapPanel>
-
+                    </StackPanel>
+                </Fluent:RibbonGroupBoxWrapPanel>
+            </ScrollViewer>
             <Grid Grid.Column="1" Grid.RowSpan="3" Background="white">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*">
@@ -444,7 +505,7 @@
                             <ListView x:Name="FilesListView" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" FontSize="15">
                                 <ListView.View>
                                     <GridView>
-                                        <GridViewColumn Header="Stt" Width="150" DisplayMemberBinding="{Binding Stt}"/>
+                                        <GridViewColumn Header="Stt" Width="30" DisplayMemberBinding="{Binding Stt}"/>
                                         <GridViewColumn Header="Filename" Width="150" DisplayMemberBinding="{Binding Filename}"/>
                                         <GridViewColumn Header="New Filename" Width="150" DisplayMemberBinding="{Binding NewFilename}"/>
                                         <GridViewColumn Header="Path" Width="160" DisplayMemberBinding="{Binding Pathname}"/>
@@ -491,7 +552,7 @@
                                 </ListView.Effect>
                                 <ListView.View>
                                     <GridView>
-                                        <GridViewColumn Header="Filename" Width="30" DisplayMemberBinding="{Binding Stt}"/>
+                                        <GridViewColumn Header="Stt" Width="30" DisplayMemberBinding="{Binding Stt}"/>
                                         <GridViewColumn Header="Filename" Width="150" DisplayMemberBinding="{Binding Filename}"/>
                                         <GridViewColumn Header="New Filename" Width="150" DisplayMemberBinding="{Binding NewFilename}"/>
                                         <GridViewColumn Header="Path" Width="160" DisplayMemberBinding="{Binding Pathname}"/>

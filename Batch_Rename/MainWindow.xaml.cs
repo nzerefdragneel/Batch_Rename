@@ -214,7 +214,7 @@ namespace Batch_Rename
                             {
                             var file = new FileIOS()
                             {
-                                Stt =n,
+                                Stt =n+1,
                                 Filename = filename,
                                 NewFilename = filename,
                                 Pathname = path,
@@ -270,13 +270,12 @@ namespace Batch_Rename
                     {
                         var file = new FileIOS
                         {
-                            Stt = n,
+                            Stt = n+1,
                             Filename = filename,
                             NewFilename = filename,
                             Pathname = pathfile,
                             Type = "File",
-                            Result = "",
-                            Status = 0
+                            Result = ""
                         };
 
                         foreach (var rule in rules)
@@ -302,20 +301,20 @@ namespace Batch_Rename
             
             foreach (string d in Directory.GetDirectories(folder))
                 {
-                String[] filenameSplit = d.Split('\\');
-                String filename = filenameSplit[filenameSplit.Length - 1];
-                if ( _folderList.Where(X => X.getType() == "Folder" && ((FolderIOS)X)!.Pathname == d && ((FolderIOS)X)!.Filename==filename).FirstOrDefault() == null)
+                int index = d.LastIndexOf("\\");
+                if (index == -1) index = 0;
+                var Pathname = d.Substring(0, index);
+                var filename = d.Substring(index + 1);
+                if ( _folderList.Where(X => X.getType() == "Folder" && ((FolderIOS)X)!.Pathname == Pathname && ((FolderIOS)X)!.Filename==filename).FirstOrDefault() == null)
                 {  
                     int n = _folderList.Count;
                     var file = new FolderIOS
-                    {   Stt = n,
+                    {   Stt = n+1,
                         Filename = filename,
                         NewFilename = filename,
-                        Pathname =d,
+                        Pathname =Pathname,
                         Type = "Folder",
-                        Result = "",
-                        Status = 0
-                    };
+                        Result = ""                    };
 
                     foreach (var rule in rules)
                     {
@@ -797,23 +796,56 @@ namespace Batch_Rename
                     Debug.WriteLine("___________________________");
                     Debug.WriteLine(file.Pathname); Debug.WriteLine(file.NewFilename);
 
-                    if (newPath == "") { 
-                    File.Move(file.Pathname + "\\" + file.Filename, file.Pathname + "\\" + file.NewFilename);
-                    var filereset = new FileIOS()
-                    {
-                        Filename = file.NewFilename.ToString(),
-                        NewFilename = file.Filename.ToString(),
-                        Pathname = file.Pathname
-                    };
-                    _resetfileList.Add(filereset);
-                    file.Filename = file.NewFilename;
+                    if (newPath == "") {
+                        var patht = file.Pathname + "\\" + file.Filename;
+                        if (File.Exists(patht))
+                        {
+                            File.Move(file.Pathname + "\\" + file.Filename, file.Pathname + "\\" + file.NewFilename);
+                            var filereset = new FileIOS()
+                            {
+                                Filename = file.NewFilename.ToString(),
+                                NewFilename = file.Filename.ToString(),
+                                Pathname = file.Pathname
+                            };
+                            _resetfileList.Add(filereset);
+                            file.Filename = file.NewFilename;
+                            file.Status = "complete";
+                        }
+                        else
+                        {
+                            MessageBox.Show(patht,"Not exists");
+                            file.Error = "can't find file";
+                        }
+                   
+                   
                     }
                     else
                     {
-                    File.Copy(file.Pathname + "\\" + file.Filename, newPath + "\\" + file.NewFilename);
+                        var oldpath = file.Pathname + "\\" + file.Filename;
+                        var newpath = newPath + "\\" + file.NewFilename;
+                        if (File.Exists(oldpath))
+                        {
+                            if (File.Exists(newpath))
+                            {
+                               
+                                MessageBox.Show(newpath + " is Exists");
+                            }
+                            else
+                            {
+                                File.Copy(oldpath, newpath);
+                                file.Status = "complete";
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show(oldpath + " not exist");
+                            file.Status = "err";file.Error = "can't find file";
+                            
+                        }
+                    
 
                     }
-                file.Status = 1; 
+                
                 } 
                     
                    
@@ -825,32 +857,46 @@ namespace Batch_Rename
                 }
 
             }
+           
 
-            foreach (var file in _folderList)
-            {
-                if (stoprename == false)
+                for (int i= _folderList.Count-1;i>=0;i--)
                 {
-                  
-                        Directory.Move(file.Pathname + "\\" + file.Filename, file.Pathname + "\\" + file.NewFilename);
-                        var filereset = new FolderIOS()
+                    var file= _folderList[i];
+                    var oldpath = file.Pathname + "\\" + file.Filename;
+                    var newpath = file.Pathname + "\\" + file.NewFilename;
+                    if (Directory.Exists(oldpath))
+                    {
+                        if (Directory.Exists(newpath))
                         {
-                            Filename = file.NewFilename.ToString(),
-                            NewFilename = file.Filename.ToString(),
-                            Pathname = file.Pathname
-                        };
-                        _resetfolderList.Add(filereset);
-                        file.Filename = file.NewFilename;
-                    
-             
-                    file.Status = 1;
+                            MessageBox.Show(newpath + " exist");
+                            file.Status = "err";
+                            file.Error = "new name is exist";
+                        }
+                        else
+                        {
+                            Directory.Move(oldpath, newpath);
+                            var filereset = new FolderIOS()
+                            {
+                                Filename = file.NewFilename.ToString(),
+                                NewFilename = file.Filename.ToString(),
+                                Pathname = file.Pathname
+                            };
+                            _resetfolderList.Add(filereset);
+                        _folderList[i].Filename = file.NewFilename;
+                        _folderList[i].Status = "complete";
+
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show(oldpath, "cant find");
+                        file.Status = "err";
+                        file.Error = "cant find path";
+                    }
                 }
 
-                else
-                {
-                    break;
-                }
 
-            }
+           
 
             MessageBox.Show("All files have been renamed!");
             ControlRename.Visibility=Visibility.Collapsed;

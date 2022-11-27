@@ -18,7 +18,7 @@ namespace Batch_Rename
         public string Type { get; set; }
 
         public int Stt { get; set; }
-        public int Status { get; set; }
+        public string Status { get; set; }
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -31,7 +31,7 @@ namespace Batch_Rename
         {
             return "File";
         }
-        public int getStatus()
+        public string getStatus()
         {
             return this.Status;
         }
@@ -46,7 +46,7 @@ namespace Batch_Rename
         public string Result { get; set; }
         public string Type { get; set; }
         public string Error { get; set; }
-        public int Status { get; set; }
+        public string Status { get; set; }
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -56,7 +56,7 @@ namespace Batch_Rename
         {
             return "Folder";
         }
-        public int getStatus()
+        public string getStatus()
         {
             return this.Status;
         }

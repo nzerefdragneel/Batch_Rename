@@ -35,6 +35,9 @@ using Microsoft.VisualBasic.Devices;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
 using System.Net;
 using Path = System.IO.Path;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using System.Windows.Threading;
 
 namespace Batch_Rename
 {
@@ -50,6 +53,13 @@ namespace Batch_Rename
         {
             InitializeComponent();
         }
+        class position
+        {
+            public double height { get; set;}
+            public double width { get; set;}
+            public double left { get; set;}
+            public double top { get; set;}
+        }
         string tab_control;
         static Dictionary<string, IRule> _prototypes = new Dictionary<string, IRule>();
 
@@ -63,7 +73,7 @@ namespace Batch_Rename
         string newPath="";
 
         List<IRule?> _resetrules = new List<IRule?>();
-
+        string pathPosition = Environment.CurrentDirectory.ToString() + "\\position.json";
 
         ObservableCollection<FileIOS> _resetfileList = new ObservableCollection<FileIOS>();
 
@@ -88,6 +98,9 @@ namespace Batch_Rename
         {
            Debug.WriteLine("rule+++++++++++++++++++++++++++++++++++++");
             var exeFolder = AppDomain.CurrentDomain.BaseDirectory;
+            Debug.WriteLine("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+            Debug.WriteLine(exeFolder);
+            Debug.WriteLine("__________*********************************");
             var folderInfo = new DirectoryInfo(exeFolder);
             var dllFiles = folderInfo.GetFiles("*.dll");
             foreach (var file in dllFiles)
@@ -162,6 +175,41 @@ namespace Batch_Rename
             LoadRuleFromFile();
             cmbChooseRule.ItemsSource= _ruleList;
             cmbChoosePreset.ItemsSource = _nameRuleReset;
+
+            StreamReader input;
+            if (File.Exists(pathPosition)) { 
+            input = new StreamReader(pathPosition);
+
+            string file = input.ReadToEnd();
+            input.Close();
+            dynamic pos = JsonObject.Parse(file);
+
+           
+            position? sourcePosition = JsonSerializer.Deserialize<position>(pos);
+
+
+              
+           
+                
+                    if (sourcePosition != null)
+                    {
+                        this.Height = sourcePosition.height;
+                        this.Width = sourcePosition.width;
+                        this.Left = sourcePosition.left;
+                        this.Top = sourcePosition.top;
+                    }
+                    
+                
+            }
+
+            /*
+            var destination = sourcePosition.Select(d => new position
+            {
+                height = d.height,
+                width = d.width,
+                left = d.left,
+                top = d.top
+            });*/
 
 
         }
@@ -784,21 +832,53 @@ namespace Batch_Rename
 
         }
 
-
-        private void StartRename(object sender, RoutedEventArgs e)
+        private int Collapse()
         {
+            
+            return 0;
+        }
+        public async Task<int> LongRunningOperationAsync() // assume we return an int from this long running operation 
+        {
+            await Task.Delay(10); // 1 second delay
+            return 1;
+        }
+
+        public event Action<object, string> Click;
+        private async void StartRename(object sender, RoutedEventArgs e)
+
+        {
+            Task<int> longRunningTask = LongRunningOperationAsync();
+            // independent work which doesn't need the result of LongRunningOperationAsync can be done here
             StartRenameGrid.Visibility = Visibility.Collapsed;
             ControlRename.Visibility = Visibility.Visible;
+            //and now we call await on the task 
+            int result = await longRunningTask;
+            int numoff = 0;
+            if (Click != null)
+            {
+                ProgressButton.Visibility = Visibility.Visible;
+
+               
+            }
             foreach (var file in _fileList)
             {
-                if (stoprename == false)
-                {
+              
+                while (stoprename)
+                { 
+                }
                     Debug.WriteLine("___________________________");
                     Debug.WriteLine(file.Pathname); Debug.WriteLine(file.NewFilename);
-
+                    
                     if (newPath == "") {
                         var patht = file.Pathname + "\\" + file.Filename;
-                        if (File.Exists(patht))
+                    if (File.Exists(patht))
+                    {
+                        var newpath = file.Pathname + "\\" + file.NewFilename;
+                        if (File.Exists(newpath))
+                        {
+                            //MessageBox.Show(newPath, "having!");
+                        }
+                        else
                         {
                             File.Move(file.Pathname + "\\" + file.Filename, file.Pathname + "\\" + file.NewFilename);
                             var filereset = new FileIOS()
@@ -811,11 +891,13 @@ namespace Batch_Rename
                             file.Filename = file.NewFilename;
                             file.Status = "complete";
                         }
-                        else
-                        {
-                            MessageBox.Show(patht,"Not exists");
-                            file.Error = "can't find file";
-                        }
+                    }
+                    else
+                    {
+                       //
+                       //MessageBox.Show(patht, "Not exists");
+                        file.Error = "can't find file";
+                    }
                    
                    
                     }
@@ -828,7 +910,7 @@ namespace Batch_Rename
                             if (File.Exists(newpath))
                             {
                                
-                                MessageBox.Show(newpath + " is Exists");
+                              //  MessageBox.Show(newpath + " is Exists");
                             }
                             else
                             {
@@ -838,23 +920,15 @@ namespace Batch_Rename
                         }
                         else
                         {
-                            MessageBox.Show(oldpath + " not exist");
+                           // MessageBox.Show(oldpath + " not exist");
                             file.Status = "err";file.Error = "can't find file";
                             
                         }
                     
 
-                    }
-                
-                } 
                     
-                   
-                   
                 
-                else
-                {
-                    break;
-                }
+                }         
 
             }
            
@@ -868,7 +942,7 @@ namespace Batch_Rename
                     {
                         if (Directory.Exists(newpath))
                         {
-                            MessageBox.Show(newpath + " exist");
+                          //  MessageBox.Show(newpath + " exist");
                             file.Status = "err";
                             file.Error = "new name is exist";
                         }
@@ -889,7 +963,7 @@ namespace Batch_Rename
                     }
                     else
                     {
-                        MessageBox.Show(oldpath, "cant find");
+                      //  MessageBox.Show(oldpath, "cant find");
                         file.Status = "err";
                         file.Error = "cant find path";
                     }
@@ -902,10 +976,13 @@ namespace Batch_Rename
             ControlRename.Visibility=Visibility.Collapsed;
             StartRenameGrid.Visibility = Visibility.Visible;
         }
-
-        private void StopRename(object sender, RoutedEventArgs e)
+        
+        private async void StopRenameAsync(object sender, RoutedEventArgs e)
         {
-            stoprename = true;
+            
+            // independent work which doesn't need the result of LongRunningOperationAsync can be done here
+            stoprename = !stoprename;
+   
         }
 
         private void creditsSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -1192,6 +1269,22 @@ namespace Batch_Rename
                     }
                 }
                 
+            }
+        }
+
+        private void Window_close(object sender, EventArgs e)
+        {
+            var position = new position()
+            {
+                height = this.Height,
+                width = this.Width,
+                left = this.Left,
+                top = this.Top
+            };
+            string jsonString = JsonSerializer.Serialize(position, new JsonSerializerOptions() { WriteIndented = true });
+            using (StreamWriter outputFile = new StreamWriter(pathPosition))
+            {
+                outputFile.WriteLine(jsonString);
             }
         }
     }

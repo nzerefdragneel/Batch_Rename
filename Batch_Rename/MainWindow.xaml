@@ -11,6 +11,7 @@
                      Closed="Window_close"
                      >
     <Window.Resources>
+
         <ResourceDictionary>
             <Style x:Key="ScrollThumbs" TargetType="{x:Type Thumb}">
                 <Setter Property="Template">
@@ -34,7 +35,8 @@
                 </Setter>
             </Style>
 
-            <!--SCROLLBARS-->
+
+
             <Style x:Key="{x:Type ScrollBar}" TargetType="{x:Type ScrollBar}">
                 <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
                 <Setter Property="Foreground" Value="White"/>
@@ -285,7 +287,7 @@
 
                     </Grid>
                     <StackPanel x:Name="editaddCounter" Grid.Row="1" Grid.ColumnSpan="3" Margin="10 0 0 0" Visibility="Visible">
-                        <DockPanel Visibility="Collapsed">
+                        <DockPanel Visibility="Visible">
                             <TextBlock Text="Number off digits"  Margin="0 15 10 10" FontSize="15" Foreground="white" Height="26"></TextBlock>
                             <Fluent:ComboBox x:Name="cmSelectcounter"    Margin="00,0,10,0"
                          Background="#235295" Foreground="#235295" Text="Digits" Height="24" IsReadOnly="True">
@@ -303,7 +305,23 @@
                                 <ComboBoxItem>Add on Suffix</ComboBoxItem>
                             </Fluent:ComboBox>
                         </DockPanel>
-                    </StackPanel>
+                            <DockPanel>
+                                <TextBlock Text="Step" Margin="0 15 10 10" FontSize="15" Foreground="white" Height="26"></TextBlock>
+                                <TextBox Name="textboxStep" Height="22" Margin="0,0,20,0"
+                                HorizontalContentAlignment="Right" 
+                                VerticalContentAlignment="Center" Foreground="White"
+                                     Background="#235295" TextChanged="_textboxReplace_TextChanged"
+                                     />
+                            </DockPanel>
+                            <DockPanel>
+                                <TextBlock Text="Start Value" Margin="0 15 10 10" FontSize="15" Foreground="white" Height="26"></TextBlock>
+                                <TextBox Name="textboxStartValue" Height="22" Margin="0,0,20,0"
+                                HorizontalContentAlignment="Right" 
+                                VerticalContentAlignment="Center" Foreground="White"
+                                     Background="#235295" TextChanged="_textboxReplace_TextChanged"
+                                     />
+                            </DockPanel>
+                        </StackPanel>
                 </StackPanel>
                 <StackPanel x:Name="Trim" MouseDown="ChangeExtension_mouseDown" Margin="10">
                     <Grid Grid.Column="0" Grid.Row="1" >
@@ -482,7 +500,8 @@
                         <ColumnDefinition Width="100"></ColumnDefinition>
                         <ColumnDefinition Width="100"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    
+
+                    <ProgressBar Name="processbar" Maximum="1000" Minimum="0" Margin="0,10,0,10"></ProgressBar>
                     <Button Grid.Column="3" Width="70" Height="30" Margin="0,4,0,4" Background="#235295" BorderThickness="0" 
                              Click="StartRename" DockPanel.Dock="Right"
                              Foreground="White" FontSize="15">
@@ -520,6 +539,7 @@
                             <ToolTip Content="Stop Rename"/>
                         </Button.ToolTip>
                     </Button>
+                    <ProgressBar x:Name="ProgressButton" IsIndeterminate="True" Opacity="0.5" Margin="0" Visibility="Hidden"/>
                 </WrapPanel>
                 
                 <TabControl Grid.Row="0" Grid.Column="1" FontSize="15" SelectionChanged="TabControl_SelectionChanged" >

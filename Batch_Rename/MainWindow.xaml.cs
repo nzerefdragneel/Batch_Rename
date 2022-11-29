@@ -38,6 +38,7 @@ using Path = System.IO.Path;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Windows.Threading;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace Batch_Rename
 {
@@ -844,28 +845,42 @@ namespace Batch_Rename
         }
 
         public event Action<object, string> Click;
+        private Task<Visibility> ClickEvent()
+        {
+            return Task.Run(() =>
+            {
+
+                if (Click != null)
+                    MessageBox.Show("Click");
+                MessageBox.Show("Click");
+                return Visibility.Hidden;
+
+            });
+        }
         private async void StartRename(object sender, RoutedEventArgs e)
 
         {
-            Task<int> longRunningTask = LongRunningOperationAsync();
-            // independent work which doesn't need the result of LongRunningOperationAsync can be done here
-            StartRenameGrid.Visibility = Visibility.Collapsed;
-            ControlRename.Visibility = Visibility.Visible;
-            //and now we call await on the task 
-            int result = await longRunningTask;
-            int numoff = 0;
-            if (Click != null)
-            {
-                ProgressButton.Visibility = Visibility.Visible;
-
-               
-            }
+            /*  Task<int> longRunningTask = LongRunningOperationAsync();
+              // independent work which doesn't need the result of LongRunningOperationAsync can be done here
+              StartRenameGrid.Visibility = Visibility.Collapsed;
+              ControlRename.Visibility = Visibility.Visible;
+              //and now we call await on the task 
+              int result = await longRunningTask;
+              int numoff = 0;
+              if (Click != null)
+              {
+                  ProgressButton.Visibility = Visibility.Visible;
+              }*/
+            processbar.Maximum = _fileList.Count+10;
+            
             foreach (var file in _fileList)
             {
+                    processbar.Value++;
+                    if (Click != null)
+                    ProgressButton.Visibility = await ClickEvent();
+                else
+                    ProgressButton.Visibility = Visibility.Hidden;
               
-                while (stoprename)
-                { 
-                }
                     Debug.WriteLine("___________________________");
                     Debug.WriteLine(file.Pathname); Debug.WriteLine(file.NewFilename);
                     

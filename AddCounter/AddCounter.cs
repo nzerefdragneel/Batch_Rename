@@ -9,6 +9,8 @@ namespace AddCounter
         public int NoDigits { get; set; }
         public string Kind { get; set; }
         public int Step { get; set; }
+        public int StartValue { get; set; }
+
         public int CounterFile { get; set; }
         public int CounterFolder { get; set; }
         public string Name => "AddCounter";
@@ -17,6 +19,7 @@ namespace AddCounter
             if (x[0] == "Kind") Kind = x[1];
             if (x[0]=="Step") Step = int.Parse(x[1]);
             if (x[0]=="NoDigits") NoDigits= int.Parse(x[1]);
+            if (x[0] == "StartValue") StartValue = int.Parse(x[1]);
         }
      
         public object Clone()
@@ -36,8 +39,9 @@ namespace AddCounter
             result.NoDigits =0;
             result.Kind = "Pre";
             result.Step = 1;
-            result.CounterFile = 0;
-            result.CounterFolder = 0;
+            result.StartValue = 0;
+            result.CounterFile = result.StartValue;
+            result.CounterFolder = result.StartValue;
             return result;
         }
 

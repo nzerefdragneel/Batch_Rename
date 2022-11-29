@@ -8,25 +8,24 @@ namespace addCase
 {
     class AddCase : IRule
     {
-        private string @case;
+        private string caseName{get;set; }
 
-        public string getData()
+         public string getData()
         {
-            return GetCase();
+            return caseName;
         }
-
         public void reset()
         {
-            @case = "PascalCase";
+           caseName = "PascalCase";
         }
         public string GetCase()
         {
-            return @case;
+            return caseName;
         }
 
         public void SetCase(string value)
         {
-            @case = value;
+            caseName = value;
         }
 
         public string Name => "AddCase";
@@ -36,10 +35,11 @@ namespace addCase
             throw new NotImplementedException();
         }
         public void EditRule(string data) {
-            
-            SetCase(data);
-            Debug.WriteLine(GetCase());
-            Debug.WriteLine("VVVVVVVVVVVVVVVVVVVVVVVVVVVV");
+            if (data != "")
+            {
+                caseName = data;
+            }
+           
         }
         public IRule? Parse(string data)
         {
@@ -50,13 +50,14 @@ namespace addCase
             var thiscase= tokens[1];
 
             AddCase result = new AddCase();
-            SetCase("PascalCase");
-            @case = "PascalCase";
+            result.caseName = "PascalCase";
+            Debug.WriteLine(GetCase());
             return result;
         }
 
         public string Rename(string origin, string type)
         {
+            if (caseName == "") return origin;
             int index = origin.LastIndexOf('.');
             string name = "", extension = "";
             if (index != -1 && type == "File")
@@ -65,9 +66,8 @@ namespace addCase
                 extension = origin.Substring(index);
             }
             else name = origin;
-            Debug.WriteLine(GetCase());
-            Debug.WriteLine("VVVVVVVVVVVVVVVVVVVVVVVVVVVV");
-            if (GetCase() == "PascalCase")
+            Debug.WriteLine(caseName);
+            if (caseName == "PascalCase")
             {
                 Regex invalidCharsRgx = new Regex("[^_a-zA-Z0-9]");
                 Regex whiteSpace = new Regex(@"(?<=\s)");
@@ -85,15 +85,15 @@ namespace addCase
                     .Select(w => upperCaseInside.Replace(w, m => m.Value.ToLower()));
                 origin = string.Concat(pascalCase) + extension;
             }
-            else if (GetCase() == "UpCase")
+            else if (caseName == "UpCase")
             {
                 origin = origin.ToUpper();
             }
-            else if (GetCase() == "LowerCase")
+            else if (caseName == "LowerCase")
             {
                 origin = origin.ToLower();
             }
-            else if (GetCase() == "RemoveAllSpace")
+            else if (caseName == "RemoveAllSpace")
             {
                
                 origin = Regex.Replace(origin, @"\s+", "");

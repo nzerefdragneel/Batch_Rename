@@ -176,7 +176,8 @@ namespace Batch_Rename
             LoadRuleFromFile();
             cmbChooseRule.ItemsSource= _ruleList;
             cmbChoosePreset.ItemsSource = _nameRuleReset;
-
+            cmbAddCase.ItemsSource = _case;
+            cmbAddCase.SelectedIndex = 0;
             StreamReader input;
             if (File.Exists(pathPosition)) { 
             input = new StreamReader(pathPosition);
@@ -692,6 +693,7 @@ namespace Batch_Rename
                 
                 for (int i = 0; i < _fileList.Count; i++)
                 {
+                    Debug.WriteLine(rule.Name);
                     string newName = _fileList[i].NewFilename;
                     newName = rule?.Rename(newName, "File")!;
                     _fileList[i].NewFilename = newName;
@@ -1078,35 +1080,41 @@ namespace Batch_Rename
 
         private void cmbchangedSelection(object sender, SelectionChangedEventArgs e)
         {
-            string isCase = cmbAddCase.Text;
-
-            isCase=toPascalCase(isCase);
-            Debug.WriteLine(isCase);
-            string keyword = "AddCase";
-            string nameRuleEdit = "AddCase";
-            if (!string.IsNullOrEmpty(isCase))
+            int index = cmbAddCase.SelectedIndex;
+            if (index != -1)
             {
+                string isCase = _case[index];
 
-                foreach (var rule in rules)
-                {
-                    if (rule.Name == nameRuleEdit)
-                        rule?.EditRule(isCase);
+                isCase = toPascalCase(isCase);
 
-                }
-                foreach (var file in _fileList)
+                Debug.WriteLine(isCase);
+
+                string keyword = "AddCase";
+                string nameRuleEdit = "AddCase";
+                if (!string.IsNullOrEmpty(isCase))
                 {
-                    file.NewFilename = file.Filename;
+
                     foreach (var rule in rules)
                     {
-                        file.NewFilename = rule?.Rename(file.NewFilename, "File")!;
+                        if (rule.Name == nameRuleEdit)
+                            rule?.EditRule(isCase);
+
                     }
-                }
-                foreach (var file in _folderList)
-                {
-                    file.NewFilename = file.Filename;
-                    foreach (var rule in rules)
+                    foreach (var file in _fileList)
                     {
-                        file.NewFilename = rule?.Rename(file.NewFilename, "Folder")!;
+                        file.NewFilename = file.Filename;
+                        foreach (var rule in rules)
+                        {
+                            file.NewFilename = rule?.Rename(file.NewFilename, "File")!;
+                        }
+                    }
+                    foreach (var file in _folderList)
+                    {
+                        file.NewFilename = file.Filename;
+                        foreach (var rule in rules)
+                        {
+                            file.NewFilename = rule?.Rename(file.NewFilename, "Folder")!;
+                        }
                     }
                 }
             }
@@ -1301,6 +1309,12 @@ namespace Batch_Rename
             {
                 outputFile.WriteLine(jsonString);
             }
+        }
+
+        private void btnOkChange(object sender, RoutedEventArgs e)
+        {
+            var parent = ((System.Windows.Controls.Button)sender).Parent;
+           
         }
     }
 }

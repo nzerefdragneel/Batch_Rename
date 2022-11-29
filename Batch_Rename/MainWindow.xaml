@@ -217,7 +217,16 @@
                                      Background="#235295" TextChanged="_textboxReplace_TextChanged"
                                      />
                     </DockPanel>
-                </StackPanel>
+
+                        <Button  Width="200" Height="30" Margin="10,4,0,4" Background="white" BorderThickness="0" 
+                             Click="btnOkChange" DockPanel.Dock="Left"
+                             Foreground="#235295" FontSize="15" DataContext="Ok" Visibility="Collapsed" >
+                            OK
+                            <Button.ToolTip>
+                                <ToolTip Content="Click to choose address"/>
+                            </Button.ToolTip>
+                        </Button>
+                    </StackPanel>
 
 
                 <StackPanel x:Name="AddCase" MouseDown="ChangeExtension_mouseDown" Margin="10">
@@ -249,14 +258,16 @@
                     </Grid>
                     <DockPanel x:Name="editAddCase" Grid.Row="1" Grid.ColumnSpan="3" Margin="10 0 0 0" Visibility="Visible">
                         <TextBlock Text="Choose Case" Margin="0 15 10 10" FontSize="15" Foreground="white" Height="26"></TextBlock>
-                        <Fluent:ComboBox x:Name="cmbAddCase"  Width="151" SelectionChanged="cmbchangedSelection"
+                            <Fluent:ComboBox x:Name="cmbAddCase"  Width="151" SelectionChanged="cmbchangedSelection"
                          Background="#235295" Foreground="#235295" Text="Choose Case" Height="24" IsReadOnly="True">
-                            <ComboBoxItem IsSelected="True">Pascal case</ComboBoxItem>
-                            <ComboBoxItem>Up case</ComboBoxItem>
-                            <ComboBoxItem>Lower case</ComboBoxItem>
-                            <ComboBoxItem>Remove all space</ComboBoxItem>
-
-                        </Fluent:ComboBox>
+                                <Fluent:ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </Fluent:ComboBox.ItemTemplate>
+                            </Fluent:ComboBox>
                     </DockPanel>
                 </StackPanel>
                 <StackPanel x:Name="AddCounter" MouseDown="ChangeExtension_mouseDown" Margin="10">

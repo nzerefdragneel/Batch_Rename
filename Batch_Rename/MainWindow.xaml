@@ -8,8 +8,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="700" Width="1000"
         Loaded="Window_loaded"
-                     Closed="Window_close"
-                     >
+        Closed="Window_close">
     <Window.Resources>
 
         <ResourceDictionary>
@@ -298,7 +297,7 @@
 
 
                     </Grid>
-                    <StackPanel x:Name="editaddCounter" Grid.Row="1" Grid.ColumnSpan="3" Margin="10 0 0 0" Visibility="Visible">
+                    <StackPanel x:Name="editaddCounter" Grid.Row="1" Grid.ColumnSpan="3" Margin="10 0 0 0" Visibility="Collapsed">
                         <DockPanel Visibility="Visible">
                             <TextBlock Text="Number off digits"  Margin="0 15 10 10" FontSize="15" Foreground="white" Height="26"></TextBlock>
                             <Fluent:ComboBox x:Name="cmSelectNoDigits"    Margin="00,0,10,0"
@@ -634,8 +633,9 @@
 
                                 </Button>
                             </StackPanel>
-                            <ListView x:Name="FilesListView" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" FontSize="15">
-                                <ListView.View>
+                            <ListView x:Name="FilesListView" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Background="#f7d3ba" FontSize="15">
+                              
+                              <ListView.View>
                                     <GridView>
                                         <GridViewColumn Header="Stt" Width="30" DisplayMemberBinding="{Binding Stt}"/>
                                         <GridViewColumn Header="Filename" Width="150" DisplayMemberBinding="{Binding Filename}"/>
@@ -645,8 +645,13 @@
                                         <GridViewColumn Header="Status" Width="45"  DisplayMemberBinding="{Binding Status}"/>
                                     </GridView>
                                 </ListView.View>
-
-                            </ListView>
+                                <ListView.ItemContainerStyle>
+                                    <Style TargetType="ListViewItem" >
+                                        <EventSetter Event="MouseDoubleClick" />
+                                    </Style>
+                                </ListView.ItemContainerStyle>
+                                
+                            </ListView> 
                         </Grid>
                     </TabItem>
                     <TabItem Header="Rename Folders" Height="35" FontSize="20">

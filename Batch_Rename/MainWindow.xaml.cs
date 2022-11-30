@@ -42,6 +42,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 using ControlzEx.Standard;
 using System.ComponentModel;
 using System.CodeDom;
+using System.Diagnostics.Metrics;
 
 namespace Batch_Rename
 {
@@ -74,6 +75,7 @@ namespace Batch_Rename
         ObservableCollection<FolderIOS> _folderList = new ObservableCollection<FolderIOS>();
 
         ObservableCollection<FolderIOS> _resetfolderList = new ObservableCollection<FolderIOS>();
+
 
         List<string> _case = new List<string>() { "PascalCase", "UpCase", "LowerCase", "RemoveAllSpace" };
         string newPath="";
@@ -565,44 +567,61 @@ namespace Batch_Rename
         private void _textboxReplace_TextChanged(object sender, TextChangedEventArgs e)
         {
             var parent = ((System.Windows.Controls.TextBox)sender);
-          
-            string data=parent.Text.ToString();
-            string nameRuleEdit;
-            switch (parent.Name.ToString())
-            {
-                case "tb_extension":
-                    nameRuleEdit = "ChangeExtension";
-                    break;
-                case "textboxAddprefix":
-                    nameRuleEdit = "AddPrefix";
-                    break;
-                case "textboxOldCharacter":
-                    nameRuleEdit = "ChangeCharacters";
-                    if (textboxNewCharacter.Text.Length > 0 && textboxOldCharacter.Text.Length > 0)
-                        data = textboxOldCharacter.Text + "?" + textboxNewCharacter.Text[0];
-                    else data = "";
-                    break;
-                case "textboxNewCharacter":
-                    nameRuleEdit = "ChangeCharacters";
-                    if (textboxNewCharacter.Text.Length > 0 && textboxOldCharacter.Text.Length > 0)
-                        data = textboxOldCharacter.Text + "?" + textboxNewCharacter.Text[0];
-                    else data = "";
-                    break;
-                default:
-                    nameRuleEdit = "AddSuffix";
-                    break;
+            Regex reg = new Regex("^[ \\.\\w-$()+=[\\];#@~,&']+$");
 
-            }
-            if (!string.IsNullOrEmpty(data))
+
+
+            string data = parent.Text.ToString();
+            if (!reg.Match(data).Success)
             {
-                foreach (var rule in rules)
+                MessageBox.Show("New extension is invalid!");
+
+                parent.Text = data.Substring(0, data.Length - 1);
+            }
+            else if (data.Length > 50)
+            {
+                MessageBox.Show("Input to long!");
+                parent.Text = data.Substring(0, data.Length - 1);
+            }
+            else
+            {
+                string nameRuleEdit;
+                switch (parent.Name.ToString())
                 {
-                    if (rule.Name == nameRuleEdit) 
-                        rule?.EditRule(data);
+                    case "tb_extension":
+                        nameRuleEdit = "ChangeExtension";
+                        break;
+                    case "textboxAddprefix":
+                        nameRuleEdit = "AddPrefix";
+                        break;
+                    case "textboxOldCharacter":
+                        nameRuleEdit = "ChangeCharacters";
+                        if (textboxNewCharacter.Text.Length > 0 && textboxOldCharacter.Text.Length > 0)
+                            data = textboxOldCharacter.Text + "?" + textboxNewCharacter.Text[0];
+                        else data = "";
+                        break;
+                    case "textboxNewCharacter":
+                        nameRuleEdit = "ChangeCharacters";
+                        if (textboxNewCharacter.Text.Length > 0 && textboxOldCharacter.Text.Length > 0)
+                            data = textboxOldCharacter.Text + "?" + textboxNewCharacter.Text[0];
+                        else data = "";
+                        break;
+                    default:
+                        nameRuleEdit = "AddSuffix";
+                        break;
 
                 }
+                if (!string.IsNullOrEmpty(data))
+                {
+                    foreach (var rule in rules)
+                    {
+                        if (rule.Name == nameRuleEdit)
+                            rule?.EditRule(data);
 
-                reviewAllruleChange();
+                    }
+
+                    reviewAllruleChange();
+                }
             }
         }
 
@@ -889,6 +908,10 @@ namespace Batch_Rename
 
             });
         }
+        private void backgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            processbar.Value = e.ProgressPercentage;
+        }
         private async void StartRename(object sender, RoutedEventArgs e)
 
         {
@@ -903,50 +926,54 @@ namespace Batch_Rename
               {
                   ProgressButton.Visibility = Visibility.Visible;
               }*/
-            processbar.Maximum = _fileList.Count+10;
-            
-            foreach (var file in _fileList)
+            processbar.Maximum = _fileList.Count+1;
+            int index = 0;
+            var backgroundWorker = sender as BackgroundWorker;
+            if (Tab1.IsSelected)
             {
-                    processbar.Value++;
+                foreach (var file in _fileList)
+                {
+                    backgroundWorker.ReportProgress(index++);
                     if (Click != null)
-                    ProgressButton.Visibility = await ClickEvent();
-                else
-                    ProgressButton.Visibility = Visibility.Hidden;
-              
+                        ProgressButton.Visibility = await ClickEvent();
+                    else
+                        ProgressButton.Visibility = Visibility.Hidden;
+
                     Debug.WriteLine("___________________________");
                     Debug.WriteLine(file.Pathname); Debug.WriteLine(file.NewFilename);
-                    
-                    if (newPath == "") {
-                        var patht = file.Pathname + "\\" + file.Filename;
-                    if (File.Exists(patht))
+
+                    if (newPath == "")
                     {
-                        var newpath = file.Pathname + "\\" + file.NewFilename;
-                        if (File.Exists(newpath))
+                        var patht = file.Pathname + "\\" + file.Filename;
+                        if (File.Exists(patht))
                         {
-                            //MessageBox.Show(newPath, "having!");
+                            var newpath = file.Pathname + "\\" + file.NewFilename;
+                            if (File.Exists(newpath))
+                            {
+                                //MessageBox.Show(newPath, "having!");
+                            }
+                            else
+                            {
+                                File.Move(file.Pathname + "\\" + file.Filename, file.Pathname + "\\" + file.NewFilename);
+                                var filereset = new FileIOS()
+                                {
+                                    Filename = file.NewFilename.ToString(),
+                                    NewFilename = file.Filename.ToString(),
+                                    Pathname = file.Pathname
+                                };
+                                _resetfileList.Add(filereset);
+                                file.Filename = file.NewFilename;
+                                file.Status = "complete";
+                            }
                         }
                         else
                         {
-                            File.Move(file.Pathname + "\\" + file.Filename, file.Pathname + "\\" + file.NewFilename);
-                            var filereset = new FileIOS()
-                            {
-                                Filename = file.NewFilename.ToString(),
-                                NewFilename = file.Filename.ToString(),
-                                Pathname = file.Pathname
-                            };
-                            _resetfileList.Add(filereset);
-                            file.Filename = file.NewFilename;
-                            file.Status = "complete";
+                            //
+                            //MessageBox.Show(patht, "Not exists");
+                            file.Error = "can't find file";
                         }
-                    }
-                    else
-                    {
-                       //
-                       //MessageBox.Show(patht, "Not exists");
-                        file.Error = "can't find file";
-                    }
-                   
-                   
+
+
                     }
                     else
                     {
@@ -956,8 +983,8 @@ namespace Batch_Rename
                         {
                             if (File.Exists(newpath))
                             {
-                               
-                              //  MessageBox.Show(newpath + " is Exists");
+
+                                //  MessageBox.Show(newpath + " is Exists");
                             }
                             else
                             {
@@ -967,29 +994,31 @@ namespace Batch_Rename
                         }
                         else
                         {
-                           // MessageBox.Show(oldpath + " not exist");
-                            file.Status = "err";file.Error = "can't find file";
-                            
+                            // MessageBox.Show(oldpath + " not exist");
+                            file.Status = "err"; file.Error = "can't find file";
+
                         }
-                    
 
-                    
-                
-                }         
 
+
+
+                    }
+
+                }
             }
-           
+            else
+            {
 
-                for (int i= _folderList.Count-1;i>=0;i--)
+                for (int i = _folderList.Count - 1; i >= 0; i--)
                 {
-                    var file= _folderList[i];
+                    var file = _folderList[i];
                     var oldpath = file.Pathname + "\\" + file.Filename;
                     var newpath = file.Pathname + "\\" + file.NewFilename;
                     if (Directory.Exists(oldpath))
                     {
                         if (Directory.Exists(newpath))
                         {
-                          //  MessageBox.Show(newpath + " exist");
+                            //  MessageBox.Show(newpath + " exist");
                             file.Status = "err";
                             file.Error = "new name is exist";
                         }
@@ -1003,19 +1032,19 @@ namespace Batch_Rename
                                 Pathname = file.Pathname
                             };
                             _resetfolderList.Add(filereset);
-                        _folderList[i].Filename = file.NewFilename;
-                        _folderList[i].Status = "complete";
+                            _folderList[i].Filename = file.NewFilename;
+                            _folderList[i].Status = "complete";
 
                         }
                     }
                     else
                     {
-                      //  MessageBox.Show(oldpath, "cant find");
+                        //  MessageBox.Show(oldpath, "cant find");
                         file.Status = "err";
                         file.Error = "cant find path";
                     }
                 }
-
+            }
 
            
 
@@ -1406,7 +1435,7 @@ namespace Batch_Rename
                 }
             }
         }
-
+       
         private void CheckStarValue(object sender, TextChangedEventArgs e)
         {
             var type = textboxStartValue.Text;
@@ -1419,7 +1448,7 @@ namespace Batch_Rename
                 catch (FormatException)
                 {
                     MessageBox.Show("Type integer pls!");
-                    textboxStartValue.Text = type.Substring(0, type.Length - 2);
+                    textboxStartValue.Text = type.Substring(0, type.Length - 1);
                 }
             }
         }

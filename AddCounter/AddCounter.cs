@@ -10,16 +10,16 @@ namespace AddCounter
         public string Kind { get; set; }
         public int Step { get; set; }
         public int StartValue { get; set; }
-
         public int CounterFile { get; set; }
         public int CounterFolder { get; set; }
         public string Name => "AddCounter";
         public void EditRule(string data) {
             var x = data.Split('?');
-            if (x[0] == "Kind") Kind = x[1];
+            if (x[0] == "Kind"){ Kind = x[1]; Debug.WriteLine("Kind",Kind); }
             if (x[0]=="Step") Step = int.Parse(x[1]);
             if (x[0]=="NoDigits") NoDigits= int.Parse(x[1]);
-            if (x[0] == "StartValue") StartValue = int.Parse(x[1]);
+            if (x[0] == "StartFile") { CounterFile = int.Parse(x[1]); StartValue = int.Parse(x[1]); }
+            if (x[0] == "StartFolder") { CounterFile = int.Parse(x[1]); StartValue = int.Parse(x[1]); }
         }
      
         public object Clone()
@@ -51,48 +51,52 @@ namespace AddCounter
         }
         public void reset()
         {
-            this.CounterFile = 0;
-            this.CounterFolder = 0;
-            this.NoDigits= 0;
+            this.CounterFile = this.StartValue;
+            this.CounterFolder = this.StartValue;
         }
         public string Rename(string origin, string type)
         {
-            Debug.WriteLine("add counter!!!!!!!!");
-
+      
             int index = origin.LastIndexOf('.');
             string name = "", extension = "";
             string thisCount;
-            if (index != -1 && type == "File")
+            if (  type == "File")
             {
-                name = origin.Substring(0, index);
-                extension = origin.Substring(index);
-                CounterFile += Step;
+                if (index != -1)
+                {
+                    name = origin.Substring(0, index);
+                    extension = origin.Substring(index);
+                }
+               
                 thisCount = CounterFile.ToString();
 
             }
             else { name = origin;
-                CounterFolder += Step;
+              
                 thisCount = CounterFolder.ToString();
             }
 
-            for (int i = thisCount.Length; i <= NoDigits; i++) thisCount = "0" + thisCount;
+            for (int i = thisCount.Length; i < NoDigits; i++) thisCount = "0" + thisCount;
             StringBuilder stringBuilder = new StringBuilder();
             if (Kind == "Pre")
             {
-                stringBuilder.Append(name);
-                stringBuilder.Append(" ");
+               
                 stringBuilder.Append(thisCount);
+                stringBuilder.Append(" ");
+                stringBuilder.Append(name);
                 stringBuilder.Append(extension);
             }
             else
             {
-                stringBuilder.Append(thisCount);
-                stringBuilder.Append(" ");
                 stringBuilder.Append(name);
+                stringBuilder.Append(" ");
+                stringBuilder.Append(thisCount);
                 stringBuilder.Append(extension);
 
             }
             origin = stringBuilder.ToString();
+            if (type == "File") CounterFile += Step;
+            else CounterFolder+= Step; 
             return origin;
         }
     }

@@ -282,7 +282,8 @@
 
                         </Grid.RowDefinitions>
                         <TextBlock Text="Add Counter" DockPanel.Dock="Left" FontSize="20" Foreground="white" />
-                        <Button Grid.Column="2" Width="20" DockPanel.Dock="Right" Height="20" Margin="0,4,0,4" Background="Transparent" BorderThickness="0" Click="EditaddCounter" >
+                        <Button Grid.Column="2" Width="20" DockPanel.Dock="Right" Height="20" Margin="0,4,0,4" Background="Transparent" BorderThickness="0" 
+                                Click="EditaddCounter" >
                             <Image Source="Images/download.png" RenderOptions.BitmapScalingMode="HighQuality"/>
                             <Button.ToolTip>
                                 <ToolTip Content="Move Rule To Bottom"/>
@@ -300,13 +301,16 @@
                     <StackPanel x:Name="editaddCounter" Grid.Row="1" Grid.ColumnSpan="3" Margin="10 0 0 0" Visibility="Visible">
                         <DockPanel Visibility="Visible">
                             <TextBlock Text="Number off digits"  Margin="0 15 10 10" FontSize="15" Foreground="white" Height="26"></TextBlock>
-                            <Fluent:ComboBox x:Name="cmSelectcounter"    Margin="00,0,10,0"
+                            <Fluent:ComboBox x:Name="cmSelectNoDigits"    Margin="00,0,10,0"
                          Background="#235295" Foreground="#235295" Text="Digits" Height="24" IsReadOnly="True">
-                                <ComboBoxItem>Pascal case</ComboBoxItem>
-                                <ComboBoxItem>Up case</ComboBoxItem>
-                                <ComboBoxItem>Lower case</ComboBoxItem>
-
-                            </Fluent:ComboBox>
+                                    <Fluent:ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding}" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </Fluent:ComboBox.ItemTemplate>
+                                </Fluent:ComboBox>
                         </DockPanel>
                         <DockPanel>
                             <TextBlock Text="Choose Type" Margin="0 15 10 10" FontSize="15" Foreground="white" Height="26"></TextBlock>
@@ -321,7 +325,7 @@
                                 <TextBox Name="textboxStep" Height="22" Margin="0,0,20,0"
                                 HorizontalContentAlignment="Right" 
                                 VerticalContentAlignment="Center" Foreground="White"
-                                     Background="#235295" TextChanged="_textboxReplace_TextChanged"
+                                     Background="#235295" TextChanged="checkStep"
                                      />
                             </DockPanel>
                             <DockPanel>
@@ -329,10 +333,22 @@
                                 <TextBox Name="textboxStartValue" Height="22" Margin="0,0,20,0"
                                 HorizontalContentAlignment="Right" 
                                 VerticalContentAlignment="Center" Foreground="White"
-                                     Background="#235295" TextChanged="_textboxReplace_TextChanged"
+                                     Background="#235295" TextChanged="CheckStarValue"
                                      />
                             </DockPanel>
+                            <DockPanel>
+                                <Button  Width="200" Height="30" Margin="10,4,0,4" Background="White"  
+                             Click="ChangeAddcounter" DockPanel.Dock="Left"
+                             Foreground="#235295" FontSize="15" DataContext="Choose Address" >
+                                   Change Add Counter
+                                    <Button.ToolTip>
+                                        <ToolTip Content="Click to Change Add Counter"/>
+                                    </Button.ToolTip>
+                                </Button>
+
+                            </DockPanel>
                         </StackPanel>
+                    
                 </StackPanel>
                 <StackPanel x:Name="Trim" MouseDown="ChangeExtension_mouseDown" Margin="10">
                     <Grid Grid.Column="0" Grid.Row="1" >

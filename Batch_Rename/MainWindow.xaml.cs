@@ -39,6 +39,9 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Windows.Threading;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
+using ControlzEx.Standard;
+using System.ComponentModel;
+using System.CodeDom;
 
 namespace Batch_Rename
 {
@@ -62,6 +65,8 @@ namespace Batch_Rename
             public double top { get; set;}
         }
         string tab_control;
+        ObservableCollection<string> _nodigits = new ObservableCollection<string>();
+
         static Dictionary<string, IRule> _prototypes = new Dictionary<string, IRule>();
 
         ObservableCollection<FileIOS> _fileList = new ObservableCollection<FileIOS>();
@@ -178,6 +183,7 @@ namespace Batch_Rename
             cmbChoosePreset.ItemsSource = _nameRuleReset;
             cmbAddCase.ItemsSource = _case;
             cmbAddCase.SelectedIndex = 0;
+            cmSelectNoDigits.ItemsSource = _nodigits;
             StreamReader input;
             if (File.Exists(pathPosition)) { 
             input = new StreamReader(pathPosition);
@@ -605,10 +611,12 @@ namespace Batch_Rename
             if (tab_control == "File")
             {
                 tab_control = "Folder";
+
                 reviewAllruleChange();
             }
             else { 
                 tab_control = "File";
+
                 reviewAllruleChange();
             }
         }
@@ -643,6 +651,7 @@ namespace Batch_Rename
         private void EditaddCounter(object sender, RoutedEventArgs e)
         {
             
+
             if (editaddCounter.Visibility.ToString() == "Collapsed")
             {
                 editaddCounter.Visibility = Visibility.Visible;
@@ -653,6 +662,27 @@ namespace Batch_Rename
             {
                 this.AddCounter.Background = brushColorDefault;
                 editaddCounter.Visibility = Visibility.Collapsed;
+                int number;
+                if (Tab1.IsSelected)
+                {
+                    number = (int)(Math.Round(Math.Log10(_fileList.Count + 1)) + 1);
+                    _nodigits.Clear();
+                    for (int i = number; i<9;i++)
+                    {
+                        _nodigits.Add(i.ToString());
+                    }
+                }
+
+                else
+                {
+                    number = (int)(Math.Round(Math.Log10(_folderList.Count + 1)) + 1);
+                    _nodigits.Clear();
+                    for (int i = number; i < 9; i++)
+                    {
+                        _nodigits.Add(i.ToString());
+                    }
+                }
+                
             }
         }
         private void previewFileName()
@@ -1315,6 +1345,83 @@ namespace Batch_Rename
         {
             var parent = ((System.Windows.Controls.Button)sender).Parent;
            
+        }
+
+        private void ChangeAddcounter(object sender, RoutedEventArgs e)
+        {
+            var inod = cmSelectNoDigits.SelectedIndex;
+            var icase = cmbChooseType.SelectedIndex;
+            var textStep = textboxStep.Text;
+            var step = Int32.Parse(textStep);
+            var textStart = textboxStartValue.Text;
+            var start = Int32.Parse(textStart);
+            var kind = cmbChooseType.SelectedIndex;
+            string data;
+            foreach (var rule in rules)
+            {
+                if (rule.Name == "AddCounter")
+                {
+                    if (inod != -1) rule.EditRule("NoDigits?" + _nodigits[inod]);
+                    if (textStep != "")
+                    {
+                        Debug.WriteLine("Step:", step);
+                        rule.EditRule("Step?" + textStep);
+                    }
+                    if (textStart != "")
+                    {
+                        data = "StartFile?" + textStart;
+                        if (Tab1.IsSelected)
+
+                            rule.EditRule(data);
+                        else {
+                            data = "StartFolder?" + textStart;
+                            rule.EditRule(data);
+                        }
+                    }
+                    if (kind != -1)
+                    {
+                        if (kind == 0) rule.EditRule("Kind?Pre");
+                        else rule.EditRule("Kind?Suf");
+                    }
+                }
+                break;
+            }
+            reviewAllruleChange();
+
+        }
+
+        private void checkStep(object sender, TextChangedEventArgs e)
+        {
+            var type = textboxStep.Text;
+            if (type != "")
+            {
+                try
+                {
+                    var x = int.Parse(type);
+                }
+                catch (FormatException)
+                {
+                    MessageBox.Show("Type integer pls!");
+                    textboxStep.Text = type.Substring(0, type.Length - 2);
+                }
+            }
+        }
+
+        private void CheckStarValue(object sender, TextChangedEventArgs e)
+        {
+            var type = textboxStartValue.Text;
+            if (type != "")
+            {
+                try
+                {
+                    var x = int.Parse(type);
+                }
+                catch (FormatException)
+                {
+                    MessageBox.Show("Type integer pls!");
+                    textboxStartValue.Text = type.Substring(0, type.Length - 2);
+                }
+            }
         }
     }
 }

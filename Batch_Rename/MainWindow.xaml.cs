@@ -5,44 +5,22 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Fluent;
-using Fluent.Localization.Languages;
-using Microsoft.WindowsAPICodePack.Dialogs;
-using static System.Net.WebRequestMethods;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 using File = System.IO.File;
 using MessageBox = System.Windows.MessageBox;
 using Contract;
 using System.Data;
-using System.Xml.Linq;
 using System.Text.RegularExpressions;
-using System.Security.Policy;
-using System.Windows.Markup;
-using Microsoft.VisualBasic.Devices;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
-using System.Net;
 using Path = System.IO.Path;
 using System.Text.Json;
 using System.Text.Json.Nodes;
-using System.Windows.Threading;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
-using ControlzEx.Standard;
 using System.ComponentModel;
-using System.CodeDom;
-using System.Diagnostics.Metrics;
 
 namespace Batch_Rename
 {
@@ -302,7 +280,7 @@ namespace Batch_Rename
                     // ItemListView.ItemsSource = _folders;
 
                     string path = dialog.SelectedPath + "\\";
-                    int count = _fileList.Count;
+                    int count = _fileList.Count+1;
                      ReadAllFileInFolder(path);
                     count = _fileList.Count - count;
                     MessageBox.Show(count.ToString());
@@ -569,19 +547,17 @@ namespace Batch_Rename
             var parent = ((System.Windows.Controls.TextBox)sender);
             Regex reg = new Regex("^[ \\.\\w-$()+=[\\];#@~,&']+$");
 
-
-
             string data = parent.Text.ToString();
-            if (!reg.Match(data).Success)
+            if (!reg.Match(data).Success && data!="")
             {
-                MessageBox.Show("New extension is invalid!");
+                MessageBox.Show("This character is invalid!");
+              
 
-                parent.Text = data.Substring(0, data.Length - 1);
             }
             else if (data.Length > 50)
             {
                 MessageBox.Show("Input to long!");
-                parent.Text = data.Substring(0, data.Length - 1);
+               
             }
             else
             {
@@ -602,9 +578,17 @@ namespace Batch_Rename
                         break;
                     case "textboxNewCharacter":
                         nameRuleEdit = "ChangeCharacters";
-                        if (textboxNewCharacter.Text.Length > 0 && textboxOldCharacter.Text.Length > 0)
-                            data = textboxOldCharacter.Text + "?" + textboxNewCharacter.Text[0];
-                        else data = "";
+                        var textnewCharacter = textboxNewCharacter.Text.ToString();
+                        if (textnewCharacter.Length > 1)
+                        {
+                            MessageBox.Show("Please type one Characters");
+                        }
+                        else
+                        {
+                            if (textboxNewCharacter.Text.Length > 0 && textboxOldCharacter.Text.Length > 0)
+                                data = textboxOldCharacter.Text + "?" + textboxNewCharacter.Text[0];
+                            else data = "";
+                        }
                         break;
                     default:
                         nameRuleEdit = "AddSuffix";
@@ -674,19 +658,13 @@ namespace Batch_Rename
             if (editaddCounter.Visibility.ToString() == "Collapsed")
             {
                 editaddCounter.Visibility = Visibility.Visible;
-               
                 this.AddCounter.Background = brushColorSelect;
-            }
-            else
-            {
-                this.AddCounter.Background = brushColorDefault;
-                editaddCounter.Visibility = Visibility.Collapsed;
                 int number;
                 if (Tab1.IsSelected)
                 {
                     number = (int)(Math.Round(Math.Log10(_fileList.Count + 1)) + 1);
                     _nodigits.Clear();
-                    for (int i = number; i<9;i++)
+                    for (int i = number; i < 9; i++)
                     {
                         _nodigits.Add(i.ToString());
                     }
@@ -701,6 +679,12 @@ namespace Batch_Rename
                         _nodigits.Add(i.ToString());
                     }
                 }
+            }
+            else
+            {
+                this.AddCounter.Background = brushColorDefault;
+                editaddCounter.Visibility = Visibility.Collapsed;
+                
                 
             }
         }
@@ -910,9 +894,11 @@ namespace Batch_Rename
         }
         private void backgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            processbar.Value = e.ProgressPercentage;
+
+             processbar.Value = e.ProgressPercentage;
+            Debug.WriteLine(processbar.Value.ToString());
         }
-        private async void StartRename(object sender, RoutedEventArgs e)
+        private void StartRename(object sender, RoutedEventArgs e)
 
         {
             /*  Task<int> longRunningTask = LongRunningOperationAsync();
@@ -926,19 +912,23 @@ namespace Batch_Rename
               {
                   ProgressButton.Visibility = Visibility.Visible;
               }*/
-            processbar.Maximum = _fileList.Count+1;
+            var max = _fileList.Count + 1;
+            
             int index = 0;
-            var backgroundWorker = sender as BackgroundWorker;
+            processbar.Maximum=max;
+            var backgroundWorker = new  BackgroundWorker();
+            backgroundWorker.WorkerReportsProgress= true;
+            backgroundWorker.ProgressChanged += new ProgressChangedEventHandler(backgroundWorker_ProgressChanged);
+            var progress = new Progress<int>(x => processbar.Value = x);
+            
             if (Tab1.IsSelected)
             {
                 foreach (var file in _fileList)
                 {
-                    backgroundWorker.ReportProgress(index++);
-                    if (Click != null)
-                        ProgressButton.Visibility = await ClickEvent();
-                    else
-                        ProgressButton.Visibility = Visibility.Hidden;
+                    index++;
 
+                    backgroundWorker.ReportProgress(index );
+                 
                     Debug.WriteLine("___________________________");
                     Debug.WriteLine(file.Pathname); Debug.WriteLine(file.NewFilename);
 
@@ -1386,11 +1376,12 @@ namespace Batch_Rename
             var start = Int32.Parse(textStart);
             var kind = cmbChooseType.SelectedIndex;
             string data;
+            var numOfSize = _fileList.Count > _folderList.Count ? _fileList.Count : _folderList.Count;
             foreach (var rule in rules)
             {
                 if (rule.Name == "AddCounter")
                 {
-                    if (inod != -1) rule.EditRule("NoDigits?" + _nodigits[inod]);
+                    if (inod != -1) rule.EditRule("NoDigits?" + _nodigits[inod]+"?"+numOfSize.ToString());
                     if (textStep != "")
                     {
                         Debug.WriteLine("Step:", step);
@@ -1422,16 +1413,23 @@ namespace Batch_Rename
         private void checkStep(object sender, TextChangedEventArgs e)
         {
             var type = textboxStep.Text;
-            if (type != "")
+            if (type != "" )
             {
-                try
+                if (type.Length > 5)
                 {
-                    var x = int.Parse(type);
+                    MessageBox.Show("Step to big!");
                 }
-                catch (FormatException)
+                else
                 {
-                    MessageBox.Show("Type integer pls!");
-                    textboxStep.Text = type.Substring(0, type.Length - 2);
+                    try
+                    {
+                        var x = int.Parse(type);
+                    }
+                    catch (FormatException)
+                    {
+                        MessageBox.Show("Type integer pls!");
+                        textboxStep.Text = type.Substring(0, type.Length - 2);
+                    }
                 }
             }
         }
@@ -1441,6 +1439,14 @@ namespace Batch_Rename
             var type = textboxStartValue.Text;
             if (type != "")
             {
+                if (type.Length > 5)
+                {
+                    MessageBox.Show("Start Value to big!");
+                }
+                else
+                {
+                   
+               
                 try
                 {
                     var x = int.Parse(type);
@@ -1449,6 +1455,7 @@ namespace Batch_Rename
                 {
                     MessageBox.Show("Type integer pls!");
                     textboxStartValue.Text = type.Substring(0, type.Length - 1);
+                    }
                 }
             }
         }

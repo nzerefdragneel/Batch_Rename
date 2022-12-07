@@ -65,7 +65,8 @@ namespace AddCounter
             if (x[0] == "NoDigits")
             {
                 var num = int.Parse(x[2]);
-                var suggestNum = (int)(Math.Round(Math.Log10(StartValue + num * Step)) + 1);
+               
+                var suggestNum = (int)(Math.Round(Math.Log10(StartValue + (num-1) * Step)) + 1);
                 
                 NoDigits = int.Parse(x[1]);
                 if (NoDigits<suggestNum)
@@ -75,6 +76,7 @@ namespace AddCounter
                     MessageBox.Show(messageslabel);
                 }
             }
+            Debug.WriteLine(StartValue);
         }
      
         public object Clone()

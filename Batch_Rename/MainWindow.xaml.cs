@@ -280,7 +280,7 @@ namespace Batch_Rename
                     // ItemListView.ItemsSource = _folders;
 
                     string path = dialog.SelectedPath + "\\";
-                    int count = _fileList.Count+1;
+                    int count = _fileList.Count;
                      ReadAllFileInFolder(path);
                     count = _fileList.Count - count;
                     MessageBox.Show(count.ToString());
@@ -373,7 +373,7 @@ namespace Batch_Rename
             {
                 var dialog = new System.Windows.Forms.FolderBrowserDialog();
                 var result = dialog.ShowDialog();
-                int counter = 0;
+                int counter = _folderList.Count;
                 if (System.Windows.Forms.DialogResult.OK == result)
                 {
                     // ItemListView.ItemsSource = _folders;
@@ -611,15 +611,17 @@ namespace Batch_Rename
 
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (tab_control == "File")
+            if (tab_control == "File" && Tab1.IsSelected==false)
             {
                 tab_control = "Folder";
-
+                textBtnStartRename.Text = "Start rename folders";
+                deleteAllfile.Text = "Delete all folders";
                 reviewAllruleChange();
             }
             else { 
                 tab_control = "File";
-
+                textBtnStartRename.Text = "Start rename files";
+                deleteAllfile.Text = "Delete all files";
                 reviewAllruleChange();
             }
         }
@@ -658,7 +660,7 @@ namespace Batch_Rename
             if (editaddCounter.Visibility.ToString() == "Collapsed")
             {
                 editaddCounter.Visibility = Visibility.Visible;
-                this.AddCounter.Background = brushColorSelect;
+             //   this.AddCounter.Background = brushColorSelect;
                 int number;
                 if (Tab1.IsSelected)
                 {
@@ -682,7 +684,7 @@ namespace Batch_Rename
             }
             else
             {
-                this.AddCounter.Background = brushColorDefault;
+            //    this.AddCounter.Background = brushColorDefault;
                 editaddCounter.Visibility = Visibility.Collapsed;
                 
                 
@@ -928,57 +930,98 @@ namespace Batch_Rename
                     index++;
 
                     backgroundWorker.ReportProgress(index );
-                 
-                    Debug.WriteLine("___________________________");
-                    Debug.WriteLine(file.Pathname); Debug.WriteLine(file.NewFilename);
+                    
 
                     if (newPath == "")
                     {
-                        var patht = file.Pathname + "\\" + file.Filename;
-                        if (File.Exists(patht))
+                        if (file.NewFilename == file.Filename)
                         {
-                            var newpath = file.Pathname + "\\" + file.NewFilename;
-                            if (File.Exists(newpath))
-                            {
-                                //MessageBox.Show(newPath, "having!");
-                            }
-                            else
-                            {
-                                File.Move(file.Pathname + "\\" + file.Filename, file.Pathname + "\\" + file.NewFilename);
-                                var filereset = new FileIOS()
-                                {
-                                    Filename = file.NewFilename.ToString(),
-                                    NewFilename = file.Filename.ToString(),
-                                    Pathname = file.Pathname
-                                };
-                                _resetfileList.Add(filereset);
-                                file.Filename = file.NewFilename;
-                                file.Status = "complete";
-                            }
+                            file.Status = "Nothing changes";
                         }
                         else
                         {
-                            //
-                            //MessageBox.Show(patht, "Not exists");
-                            file.Error = "can't find file";
+                            var patht = file.Pathname + "\\" + file.Filename;
+                            if (File.Exists(patht))
+                            {
+                                var newpathname = file.Pathname + "\\" + file.NewFilename;
+                                if (File.Exists(newpathname))
+                                {
+                                    var dulicate = 0;
+                                    int indexofdots = file.NewFilename.LastIndexOf('.');
+                                    string name = "", extension = "";
+                                    if (indexofdots != -1)
+                                    {
+                                        name = file.NewFilename.Substring(0, indexofdots);
+                                        extension = file.NewFilename.Substring(indexofdots);
+                                    }
+                                    while (File.Exists(newpathname))
+                                    {
+                                        dulicate =dulicate+ 1;
+                                        newpathname = file.Pathname + "\\" + name + " (" + dulicate.ToString() + ")" + extension;
+                                    }
+                                    File.Move(patht, newpathname);
+                                    file.Filename = name + " (" + dulicate.ToString() + ")" + extension;
+                                    file.NewFilename = file.Filename;
+                                    file.Status = "complete";
+                                }
+                                else
+                                {
+                                    File.Move(patht, newpathname);
+                                    var filereset = new FileIOS()
+                                    {
+                                        Filename = file.NewFilename.ToString(),
+                                        NewFilename = file.Filename.ToString(),
+                                        Pathname = file.Pathname
+                                    };
+                                    _resetfileList.Add(filereset);
+                                    file.Filename = file.NewFilename;
+                                    file.Status = "complete";
+                                }
+                            }
+                            else
+                            {
+                                //
+                                //MessageBox.Show(patht, "Not exists");
+                                file.Error = "can't find file";
+                            }
+
                         }
-
-
                     }
                     else
                     {
                         var oldpath = file.Pathname + "\\" + file.Filename;
-                        var newpath = newPath + "\\" + file.NewFilename;
+                        var newpathname = newPath + "\\" + file.NewFilename;
                         if (File.Exists(oldpath))
                         {
-                            if (File.Exists(newpath))
+                            if (File.Exists(newpathname))
                             {
+                                var dulicate = 0;
+                                int indexofdots = file.NewFilename.LastIndexOf('.');
+                                string name = "", extension = "";
+                                if (indexofdots != -1)
+                                {
+                                    name = file.NewFilename.Substring(0, indexofdots);
+                                    extension = file.NewFilename.Substring(indexofdots);
+                                }
+                                while (File.Exists(newpathname))
+                                {
+                                    
+                                    dulicate += 1;
+                                    Debug.WriteLine(dulicate);
+                                    newpathname = newPath + "\\" + name + " (" + dulicate.ToString() + ")" + extension;
+                                    Debug.WriteLine(newpathname);
+                                }
+                                Debug.WriteLine(newpathname);
+                                Debug.WriteLine(dulicate);
+                                File.Copy(oldpath, newpathname);
+                                file.Filename = name + " (" + dulicate.ToString() + ")" + extension;
+                                file.NewFilename = file.Filename;
+                                file.Status = "handing duplicate";
 
-                                //  MessageBox.Show(newpath + " is Exists");
                             }
                             else
                             {
-                                File.Copy(oldpath, newpath);
+                                File.Copy(oldpath, newpathname);
                                 file.Status = "complete";
                             }
                         }
@@ -1003,18 +1046,28 @@ namespace Batch_Rename
                 {
                     var file = _folderList[i];
                     var oldpath = file.Pathname + "\\" + file.Filename;
-                    var newpath = file.Pathname + "\\" + file.NewFilename;
+                    var newpathname = file.Pathname + "\\" + file.NewFilename;
                     if (Directory.Exists(oldpath))
                     {
-                        if (Directory.Exists(newpath))
+                        if (Directory.Exists(newpathname))
                         {
                             //  MessageBox.Show(newpath + " exist");
-                            file.Status = "err";
-                            file.Error = "new name is exist";
+                            var dulicate = 0;
+                           
+                            while (Directory.Exists(newpathname))
+                            {
+                                dulicate += 1;
+                                newpathname = file.Pathname + "\\" + file.NewFilename + " (" + dulicate.ToString() + ")" ;
+                            }
+                            Directory.Move(oldpath, newpathname);
+                            file.Filename = file.NewFilename + " (" + dulicate.ToString() + ")" ;
+                            file.NewFilename = file.Filename;
+                            file.Status = "complete";
+                           
                         }
                         else
                         {
-                            Directory.Move(oldpath, newpath);
+                            Directory.Move(oldpath, newpathname);
                             var filereset = new FolderIOS()
                             {
                                 Filename = file.NewFilename.ToString(),
@@ -1391,7 +1444,6 @@ namespace Batch_Rename
                     {
                         data = "StartFile?" + textStart;
                         if (Tab1.IsSelected)
-
                             rule.EditRule(data);
                         else {
                             data = "StartFolder?" + textStart;

@@ -174,48 +174,49 @@
                 </Button>
             </StackPanel>
             <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Column="0" Grid.Row="2">
-               
+
 
                 <Fluent:RibbonGroupBoxWrapPanel x:Name="ListRuleGroupBox" HorizontalAlignment="Stretch"  Grid.Column="0" Grid.Row="2" Margin="10,0,0,0">
 
 
 
-                <StackPanel x:Name="ChangeExtension" MouseDown="ChangeExtension_mouseDown" Margin="10" Grid.RowSpan="3">
-                    <Grid Grid.Column="0" Grid.Row="1" >
-                        <Grid.ColumnDefinitions >
-                            <ColumnDefinition Width="220"></ColumnDefinition>
-                            <ColumnDefinition Width="30"></ColumnDefinition>
-                            <ColumnDefinition Width="20"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
+                    <StackPanel x:Name="ChangeExtension" MouseDown="ChangeExtension_mouseDown" Margin="10" Grid.RowSpan="3" >
+                        <Grid Grid.Column="0" Grid.Row="1" >
+                            <Grid.ColumnDefinitions >
+                                <ColumnDefinition Width="220"></ColumnDefinition>
+                                <ColumnDefinition Width="30"></ColumnDefinition>
+                                <ColumnDefinition Width="20"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
 
-                            <RowDefinition Height="30"></RowDefinition>
+                                <RowDefinition Height="30"></RowDefinition>
 
-                        </Grid.RowDefinitions>
-                        <TextBlock Text="Change Extension" FontSize="20" Foreground="white" Grid.ColumnSpan="3" HorizontalAlignment="Left" Width="270" />
-                        <Button Grid.Column="2" Width="20" Height="20" Margin="0,5,0,5" Background="Transparent" BorderThickness="0" Click="EditChangeExtension" >
-                            <Image Source="Images/download.png" RenderOptions.BitmapScalingMode="HighQuality"/>
-                            <Button.ToolTip>
-                                <ToolTip Content="Move Rule To Bottom"/>
-                            </Button.ToolTip>
-                        </Button>
-                        <Button Grid.Column="1" Width="20" Height="20" Margin="5,5,5,5" Background="Transparent" BorderThickness="0" Click="deleteRule" >
-                            <Image Source="Images/garbage.png" RenderOptions.BitmapScalingMode="HighQuality"/>
-                            <Button.ToolTip>
-                                <ToolTip Content="Move Rule To Bottom"/>
-                            </Button.ToolTip>
-                        </Button>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="Change Extension" FontSize="20" Foreground="white" Grid.ColumnSpan="3" HorizontalAlignment="Left" Width="270" />
+                            <Button Grid.Column="2" Width="20" Height="20" Margin="0,5,0,5" Background="Transparent" BorderThickness="0" Click="EditChangeExtension" >
+                                <Image Source="Images/download.png" RenderOptions.BitmapScalingMode="HighQuality"/>
+                                <Button.ToolTip>
+                                    <ToolTip Content="Move Rule To Bottom"/>
+                                </Button.ToolTip>
+                            </Button>
+                            <Button Grid.Column="1" Width="20" Height="20" Margin="5,5,5,5" Background="Transparent" BorderThickness="0" Click="deleteRule" >
+                                <Image Source="Images/garbage.png" RenderOptions.BitmapScalingMode="HighQuality"/>
+                                <Button.ToolTip>
+                                    <ToolTip Content="Move Rule To Bottom"/>
+                                </Button.ToolTip>
+                            </Button>
 
 
-                    </Grid>
-                    <DockPanel x:Name="editChangeExtension" Grid.Row="1" Grid.ColumnSpan="3" Margin="10 0 0 0" Visibility="Visible">
-                        <TextBlock Text="Replace" Margin="0 15 10 10" FontSize="15" Foreground="white" Height="26"></TextBlock>
-                        <TextBox Name="tb_extension" Height="22" Margin="0,0,20,0"
+                        </Grid>
+                        <DockPanel x:Name="editChangeExtension" Grid.Row="1" Grid.ColumnSpan="3" Margin="10 0 0 0" Visibility="Visible">
+                            <TextBlock Text="Replace" Margin="0 15 10 10" FontSize="15" Foreground="white" Height="26"></TextBlock>
+                            <TextBox Name="tb_extension" Height="22" Margin="0,0,20,0"
                                 HorizontalContentAlignment="Right" Foreground="White"
                                 VerticalContentAlignment="Center"
                                      Background="#235295" TextChanged="_textboxReplace_TextChanged"
                                      />
-                    </DockPanel>
+
+                        </DockPanel>
 
                         <Button  Width="200" Height="30" Margin="10,4,0,4" Background="white" BorderThickness="0" 
                              Click="btnOkChange" DockPanel.Dock="Left"
@@ -228,35 +229,35 @@
                     </StackPanel>
 
 
-                <StackPanel x:Name="AddCase" MouseDown="ChangeExtension_mouseDown" Margin="10">
-                    <Grid Grid.Column="0" Grid.Row="1" >
-                        <Grid.ColumnDefinitions >
-                            <ColumnDefinition Width="220"></ColumnDefinition>
-                            <ColumnDefinition Width="30"></ColumnDefinition>
-                            <ColumnDefinition Width="20"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="30"></RowDefinition>
+                    <StackPanel x:Name="AddCase" MouseDown="ChangeExtension_mouseDown" Margin="10">
+                        <Grid Grid.Column="0" Grid.Row="1" >
+                            <Grid.ColumnDefinitions >
+                                <ColumnDefinition Width="220"></ColumnDefinition>
+                                <ColumnDefinition Width="30"></ColumnDefinition>
+                                <ColumnDefinition Width="20"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"></RowDefinition>
 
-                        </Grid.RowDefinitions>
-                        <TextBlock Text="Add Case" DockPanel.Dock="Left" FontSize="20" Foreground="white" />
-                        <Button Grid.Column="2" Width="20" DockPanel.Dock="Right" Height="20" Margin="0,4,0,4" Background="Transparent" BorderThickness="0" Click="EditaddCase">
-                            <Image Source="Images/download.png" RenderOptions.BitmapScalingMode="HighQuality"/>
-                            <Button.ToolTip>
-                                <ToolTip Content="Move Rule To Bottom"/>
-                            </Button.ToolTip>
-                        </Button>
-                        <Button Grid.Column="1" Width="20" DockPanel.Dock="Right" Height="20" Margin="0,4,0,4" Background="Transparent" BorderThickness="0" Click="deleteRule">
-                            <Image Source="Images/garbage.png" RenderOptions.BitmapScalingMode="HighQuality"/>
-                            <Button.ToolTip>
-                                <ToolTip Content="Move Rule To Bottom"/>
-                            </Button.ToolTip>
-                        </Button>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="Add Case" DockPanel.Dock="Left" FontSize="20" Foreground="white" />
+                            <Button Grid.Column="2" Width="20" DockPanel.Dock="Right" Height="20" Margin="0,4,0,4" Background="Transparent" BorderThickness="0" Click="EditaddCase">
+                                <Image Source="Images/download.png" RenderOptions.BitmapScalingMode="HighQuality"/>
+                                <Button.ToolTip>
+                                    <ToolTip Content="Move Rule To Bottom"/>
+                                </Button.ToolTip>
+                            </Button>
+                            <Button Grid.Column="1" Width="20" DockPanel.Dock="Right" Height="20" Margin="0,4,0,4" Background="Transparent" BorderThickness="0" Click="deleteRule">
+                                <Image Source="Images/garbage.png" RenderOptions.BitmapScalingMode="HighQuality"/>
+                                <Button.ToolTip>
+                                    <ToolTip Content="Move Rule To Bottom"/>
+                                </Button.ToolTip>
+                            </Button>
 
 
-                    </Grid>
-                    <DockPanel x:Name="editAddCase" Grid.Row="1" Grid.ColumnSpan="3" Margin="10 0 0 0" Visibility="Visible">
-                        <TextBlock Text="Choose Case" Margin="0 15 10 10" FontSize="15" Foreground="white" Height="26"></TextBlock>
+                        </Grid>
+                        <DockPanel x:Name="editAddCase" Grid.Row="1" Grid.ColumnSpan="3" Margin="10 0 0 0" Visibility="Visible">
+                            <TextBlock Text="Choose Case" Margin="0 15 10 10" FontSize="15" Foreground="white" Height="26"></TextBlock>
                             <Fluent:ComboBox x:Name="cmbAddCase"  Width="151" SelectionChanged="cmbchangedSelection"
                          Background="#235295" Foreground="#235295" Text="Choose Case" Height="24" IsReadOnly="True">
                                 <Fluent:ComboBox.ItemTemplate>
@@ -267,40 +268,40 @@
                                     </DataTemplate>
                                 </Fluent:ComboBox.ItemTemplate>
                             </Fluent:ComboBox>
-                    </DockPanel>
-                </StackPanel>
-                <StackPanel x:Name="AddCounter" MouseDown="ChangeExtension_mouseDown" Margin="10">
-                    <Grid Grid.Column="0" Grid.Row="1" >
-                        <Grid.ColumnDefinitions >
-                            <ColumnDefinition Width="220"></ColumnDefinition>
-                            <ColumnDefinition Width="30"></ColumnDefinition>
-                            <ColumnDefinition Width="20"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="30"></RowDefinition>
+                        </DockPanel>
+                    </StackPanel>
+                    <StackPanel x:Name="AddCounter" MouseDown="ChangeExtension_mouseDown" Margin="10">
+                        <Grid Grid.Column="0" Grid.Row="1" >
+                            <Grid.ColumnDefinitions >
+                                <ColumnDefinition Width="220"></ColumnDefinition>
+                                <ColumnDefinition Width="30"></ColumnDefinition>
+                                <ColumnDefinition Width="20"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"></RowDefinition>
 
-                        </Grid.RowDefinitions>
-                        <TextBlock Text="Add Counter" DockPanel.Dock="Left" FontSize="20" Foreground="white" />
-                        <Button Grid.Column="2" Width="20" DockPanel.Dock="Right" Height="20" Margin="0,4,0,4" Background="Transparent" BorderThickness="0" 
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="Add Counter" DockPanel.Dock="Left" FontSize="20" Foreground="white" />
+                            <Button Grid.Column="2" Width="20" DockPanel.Dock="Right" Height="20" Margin="0,4,0,4" Background="Transparent" BorderThickness="0" 
                                 Click="EditaddCounter" >
-                            <Image Source="Images/download.png" RenderOptions.BitmapScalingMode="HighQuality"/>
-                            <Button.ToolTip>
-                                <ToolTip Content="Move Rule To Bottom"/>
-                            </Button.ToolTip>
-                        </Button>
-                        <Button Grid.Column="1" Width="20" DockPanel.Dock="Right" Height="20" Margin="0,4,0,4" Background="Transparent" BorderThickness="0" Click="deleteRule">
-                            <Image Source="Images/garbage.png" RenderOptions.BitmapScalingMode="HighQuality"/>
-                            <Button.ToolTip>
-                                <ToolTip Content="Move Rule To Bottom"/>
-                            </Button.ToolTip>
-                        </Button>
+                                <Image Source="Images/download.png" RenderOptions.BitmapScalingMode="HighQuality"/>
+                                <Button.ToolTip>
+                                    <ToolTip Content="Move Rule To Bottom"/>
+                                </Button.ToolTip>
+                            </Button>
+                            <Button Grid.Column="1" Width="20" DockPanel.Dock="Right" Height="20" Margin="0,4,0,4" Background="Transparent" BorderThickness="0" Click="deleteRule">
+                                <Image Source="Images/garbage.png" RenderOptions.BitmapScalingMode="HighQuality"/>
+                                <Button.ToolTip>
+                                    <ToolTip Content="Move Rule To Bottom"/>
+                                </Button.ToolTip>
+                            </Button>
 
 
-                    </Grid>
-                    <StackPanel x:Name="editaddCounter" Grid.Row="1" Grid.ColumnSpan="3" Margin="10 0 0 0" Visibility="Collapsed">
-                        <DockPanel Visibility="Visible">
-                            <TextBlock Text="Number off digits"  Margin="0 15 10 10" FontSize="15" Foreground="white" Height="26"></TextBlock>
-                            <Fluent:ComboBox x:Name="cmSelectNoDigits"    Margin="00,0,10,0"
+                        </Grid>
+                        <StackPanel x:Name="editaddCounter" Grid.Row="1" Grid.ColumnSpan="3" Margin="10 0 0 0" Visibility="Collapsed">
+                            <DockPanel Visibility="Visible">
+                                <TextBlock Text="Number off digits"  Margin="0 15 10 10" FontSize="15" Foreground="white" Height="26"></TextBlock>
+                                <Fluent:ComboBox x:Name="cmSelectNoDigits"    Margin="00,0,10,0"
                          Background="#235295" Foreground="#235295" Text="Digits" Height="24" IsReadOnly="True">
                                     <Fluent:ComboBox.ItemTemplate>
                                         <DataTemplate>
@@ -310,15 +311,15 @@
                                         </DataTemplate>
                                     </Fluent:ComboBox.ItemTemplate>
                                 </Fluent:ComboBox>
-                        </DockPanel>
-                        <DockPanel>
-                            <TextBlock Text="Choose Type" Margin="0 15 10 10" FontSize="15" Foreground="white" Height="26"></TextBlock>
-                            <Fluent:ComboBox x:Name="cmbChooseType"    Margin="00,0,10,0"
+                            </DockPanel>
+                            <DockPanel>
+                                <TextBlock Text="Choose Type" Margin="0 15 10 10" FontSize="15" Foreground="white" Height="26"></TextBlock>
+                                <Fluent:ComboBox x:Name="cmbChooseType"    Margin="00,0,10,0"
                          Background="#235295" Foreground="#235295" Text="Type" Height="24" IsReadOnly="True">
-                                <ComboBoxItem IsSelected="True">Add on Prefix</ComboBoxItem>
-                                <ComboBoxItem>Add on Suffix</ComboBoxItem>
-                            </Fluent:ComboBox>
-                        </DockPanel>
+                                    <ComboBoxItem IsSelected="True">Add on Prefix</ComboBoxItem>
+                                    <ComboBoxItem>Add on Suffix</ComboBoxItem>
+                                </Fluent:ComboBox>
+                            </DockPanel>
                             <DockPanel>
                                 <TextBlock Text="Step" Margin="0 15 10 10" FontSize="15" Foreground="white" Height="26"></TextBlock>
                                 <TextBox Name="textboxStep" Height="22" Margin="0,0,20,0"
@@ -339,7 +340,7 @@
                                 <Button  Width="200" Height="30" Margin="10,4,0,4" Background="White"  
                              Click="ChangeAddcounter" DockPanel.Dock="Left"
                              Foreground="#235295" FontSize="15" DataContext="Choose Address" >
-                                   Change Add Counter
+                                    Change Add Counter
                                     <Button.ToolTip>
                                         <ToolTip Content="Click to Change Add Counter"/>
                                     </Button.ToolTip>
@@ -347,107 +348,107 @@
 
                             </DockPanel>
                         </StackPanel>
-                    
-                </StackPanel>
-                <StackPanel x:Name="Trim" MouseDown="ChangeExtension_mouseDown" Margin="10">
-                    <Grid Grid.Column="0" Grid.Row="1" >
-                        <Grid.ColumnDefinitions >
-                            <ColumnDefinition Width="220"></ColumnDefinition>
-                            <ColumnDefinition Width="30"></ColumnDefinition>
-                            <ColumnDefinition Width="20"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="30"></RowDefinition>
 
-                        </Grid.RowDefinitions>
-                        <TextBlock Text="Trim" DockPanel.Dock="Left" FontSize="20" Foreground="white" />
+                    </StackPanel>
+                    <StackPanel x:Name="Trim" MouseDown="ChangeExtension_mouseDown" Margin="10">
+                        <Grid Grid.Column="0" Grid.Row="1" >
+                            <Grid.ColumnDefinitions >
+                                <ColumnDefinition Width="220"></ColumnDefinition>
+                                <ColumnDefinition Width="30"></ColumnDefinition>
+                                <ColumnDefinition Width="20"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"></RowDefinition>
 
-                        <Button Grid.Column="1" Width="20" DockPanel.Dock="Right" Height="20" Margin="0,4,0,4" Background="Transparent" BorderThickness="0" Click="deleteRule">
-                            <Image Source="Images/garbage.png" RenderOptions.BitmapScalingMode="HighQuality"/>
-                            <Button.ToolTip>
-                                <ToolTip Content="Move Rule To Bottom"/>
-                            </Button.ToolTip>
-                        </Button>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="Trim" DockPanel.Dock="Left" FontSize="20" Foreground="white" />
 
-
-                    </Grid>
+                            <Button Grid.Column="1" Width="20" DockPanel.Dock="Right" Height="20" Margin="0,4,0,4" Background="Transparent" BorderThickness="0" Click="deleteRule">
+                                <Image Source="Images/garbage.png" RenderOptions.BitmapScalingMode="HighQuality"/>
+                                <Button.ToolTip>
+                                    <ToolTip Content="Move Rule To Bottom"/>
+                                </Button.ToolTip>
+                            </Button>
 
 
-                </StackPanel>
-                <StackPanel x:Name="AddPrefix" MouseDown="ChangeExtension_mouseDown" Margin="10">
-                    <Grid Grid.Column="0" Grid.Row="1" >
-                        <Grid.ColumnDefinitions >
-                            <ColumnDefinition Width="220"></ColumnDefinition>
-                            <ColumnDefinition Width="30"></ColumnDefinition>
-                            <ColumnDefinition Width="20"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="30"></RowDefinition>
-                        </Grid.RowDefinitions>
+                        </Grid>
 
-                        <TextBlock Text="Add Prefix" DockPanel.Dock="Left" FontSize="20" Foreground="white" />
-                        <Button Grid.Column="2" Width="20" DockPanel.Dock="Right" Height="20" Margin="0,4,0,4" Background="Transparent" BorderThickness="0" Click="EditAddPredix">
-                            <Image Source="Images/download.png" RenderOptions.BitmapScalingMode="HighQuality"/>
-                            <Button.ToolTip>
-                                <ToolTip Content="Move Rule To Bottom"/>
-                            </Button.ToolTip>
-                        </Button>
-                        <Button Grid.Column="1" Width="20" DockPanel.Dock="Right" Height="20" Margin="0,4,0,4" Background="Transparent" BorderThickness="0" Click="deleteRule">
-                            <Image Source="Images/garbage.png" RenderOptions.BitmapScalingMode="HighQuality"/>
-                            <Button.ToolTip>
-                                <ToolTip Content="Move Rule To Bottom"/>
-                            </Button.ToolTip>
-                        </Button>
-                    </Grid>
-                    <DockPanel x:Name="editAddPrefix" Height="50" Grid.ColumnSpan="3" Margin="10 0 0 0" 
+
+                    </StackPanel>
+                    <StackPanel x:Name="AddPrefix" MouseDown="ChangeExtension_mouseDown" Margin="10">
+                        <Grid Grid.Column="0" Grid.Row="1" >
+                            <Grid.ColumnDefinitions >
+                                <ColumnDefinition Width="220"></ColumnDefinition>
+                                <ColumnDefinition Width="30"></ColumnDefinition>
+                                <ColumnDefinition Width="20"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"></RowDefinition>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Text="Add Prefix" DockPanel.Dock="Left" FontSize="20" Foreground="white" />
+                            <Button Grid.Column="2" Width="20" DockPanel.Dock="Right" Height="20" Margin="0,4,0,4" Background="Transparent" BorderThickness="0" Click="EditAddPredix">
+                                <Image Source="Images/download.png" RenderOptions.BitmapScalingMode="HighQuality"/>
+                                <Button.ToolTip>
+                                    <ToolTip Content="Move Rule To Bottom"/>
+                                </Button.ToolTip>
+                            </Button>
+                            <Button Grid.Column="1" Width="20" DockPanel.Dock="Right" Height="20" Margin="0,4,0,4" Background="Transparent" BorderThickness="0" Click="deleteRule">
+                                <Image Source="Images/garbage.png" RenderOptions.BitmapScalingMode="HighQuality"/>
+                                <Button.ToolTip>
+                                    <ToolTip Content="Move Rule To Bottom"/>
+                                </Button.ToolTip>
+                            </Button>
+                        </Grid>
+                        <DockPanel x:Name="editAddPrefix" Height="50" Grid.ColumnSpan="3" Margin="10 0 0 0" 
                                    Visibility="Visible">
-                        <TextBlock Text="Prefix" Margin="0 15 10 10" FontSize="15" Foreground="white" Height="26"></TextBlock>
-                        <TextBox Name="textboxAddprefix" Height="22" Margin="0,0,20,0"
+                            <TextBlock Text="Prefix" Margin="0 15 10 10" FontSize="15" Foreground="white" Height="26"></TextBlock>
+                            <TextBox Name="textboxAddprefix" Height="22" Margin="0,0,20,0"
                                 HorizontalContentAlignment="Right"
                                 VerticalContentAlignment="Center" Foreground="White"
                                      Background="#235295" TextChanged="_textboxReplace_TextChanged"
                                      />
-                    </DockPanel>
+                        </DockPanel>
 
-                </StackPanel>
+                    </StackPanel>
 
-                <StackPanel x:Name="ChangeCharacters" MouseDown="ChangeExtension_mouseDown" Margin="10 0 10 0">
-                    <Grid Grid.Column="0" Grid.Row="1">
-                        <Grid.ColumnDefinitions >
-                            <ColumnDefinition Width="220"></ColumnDefinition>
-                            <ColumnDefinition Width="30"></ColumnDefinition>
-                            <ColumnDefinition Width="20"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="30"></RowDefinition>
-                        </Grid.RowDefinitions>
-                        <TextBlock Text="Change Characters" DockPanel.Dock="Left" FontSize="20" Foreground="white" />
-                        <Button Grid.Column="2" Width="20" DockPanel.Dock="Right" Height="20" Margin="0,4,0,4" Background="Transparent" BorderThickness="0" Click="EditChangeCharacters">
-                            <Image Source="Images/download.png" RenderOptions.BitmapScalingMode="HighQuality"/>
-                            <Button.ToolTip>
-                                <ToolTip Content="Move Rule To Bottom"/>
-                            </Button.ToolTip>
-                        </Button>
-                        <Button Grid.Column="1" Width="20" DockPanel.Dock="Right" Height="20" Margin="0,4,0,4" Background="Transparent" BorderThickness="0" Click="deleteRule">
-                            <Image Source="Images/garbage.png" RenderOptions.BitmapScalingMode="HighQuality"/>
-                            <Button.ToolTip>
-                                <ToolTip Content="Move Rule To Bottom"/>
-                            </Button.ToolTip>
-                        </Button>
-                    </Grid>
+                    <StackPanel x:Name="ChangeCharacters" MouseDown="ChangeExtension_mouseDown" Margin="10 0 10 0">
+                        <Grid Grid.Column="0" Grid.Row="1">
+                            <Grid.ColumnDefinitions >
+                                <ColumnDefinition Width="220"></ColumnDefinition>
+                                <ColumnDefinition Width="30"></ColumnDefinition>
+                                <ColumnDefinition Width="20"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="Change Characters" DockPanel.Dock="Left" FontSize="20" Foreground="white" />
+                            <Button Grid.Column="2" Width="20" DockPanel.Dock="Right" Height="20" Margin="0,4,0,4" Background="Transparent" BorderThickness="0" Click="EditChangeCharacters">
+                                <Image Source="Images/download.png" RenderOptions.BitmapScalingMode="HighQuality"/>
+                                <Button.ToolTip>
+                                    <ToolTip Content="Move Rule To Bottom"/>
+                                </Button.ToolTip>
+                            </Button>
+                            <Button Grid.Column="1" Width="20" DockPanel.Dock="Right" Height="20" Margin="0,4,0,4" Background="Transparent" BorderThickness="0" Click="deleteRule">
+                                <Image Source="Images/garbage.png" RenderOptions.BitmapScalingMode="HighQuality"/>
+                                <Button.ToolTip>
+                                    <ToolTip Content="Move Rule To Bottom"/>
+                                </Button.ToolTip>
+                            </Button>
+                        </Grid>
 
-                 
+
                         <DockPanel x:Name="editOldCharacter"  Height="100" Grid.ColumnSpan="3" Margin="10 0 0 0" 
                                    Visibility="Visible">
                             <Grid>
-                                
+
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="*"></RowDefinition>
                                     <RowDefinition Height="*"></RowDefinition>
                                 </Grid.RowDefinitions>
                                 <DockPanel Grid.Row="0">
-                            <TextBlock Text="Old Characters" Margin="0 15 10 10" FontSize="15" Foreground="white" Height="26"></TextBlock>
-                            <TextBox Name="textboxOldCharacter" Height="22" Margin="0,0,20,0"
+                                    <TextBlock Text="Old Characters" Margin="0 15 10 10" FontSize="15" Foreground="white" Height="26"></TextBlock>
+                                    <TextBox Name="textboxOldCharacter" Height="22" Margin="0,0,20,0"
                                 HorizontalContentAlignment="Right"
                                 VerticalContentAlignment="Center" Foreground="White"
                                      Background="#235295" TextChanged="_textboxReplace_TextChanged"
@@ -455,7 +456,7 @@
                                 </DockPanel>
                                 <DockPanel Grid.Row="1">
                                     <TextBlock Text="New Characters" Margin="0 15 10 10" FontSize="15" Foreground="white" Height="26"></TextBlock>
-                            <TextBox Name="textboxNewCharacter" Height="22" Margin="0,0,20,0"
+                                    <TextBox Name="textboxNewCharacter" Height="22" Margin="0,0,20,0"
                                 HorizontalContentAlignment="Right"
                                 VerticalContentAlignment="Center" Foreground="White"
                                      Background="#235295" TextChanged="_textboxReplace_TextChanged"
@@ -524,28 +525,28 @@
                         <ColumnDefinition Width="*"></ColumnDefinition>
                         <ColumnDefinition Width="100"></ColumnDefinition>
                         <ColumnDefinition Width="100"></ColumnDefinition>
-                        <ColumnDefinition Width="100"></ColumnDefinition>
+                        <ColumnDefinition Width="200"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
 
-                    <ProgressBar Name="processbar" Maximum="100" Minimum="0" Margin="0,10,0,10" ></ProgressBar>
-                    <Button Grid.Column="3" Width="70" Height="30" Margin="0,4,0,4" Background="#235295" BorderThickness="0" 
-                             Click="StartRename" DockPanel.Dock="Right"
+                    <ProgressBar Name="processbar" Maximum="100" Minimum="0" Margin="0,10,0,10" Visibility="Collapsed"></ProgressBar>
+                    <Button Grid.Column="3" Height="30" Margin="21,5,15,5" Background="#235295" BorderThickness="0" 
+                             Click="StartRename" DockPanel.Dock="Right" Name="StartrenameBtnBottom" 
                              Foreground="White" FontSize="15">
-                        Start
+                        <TextBlock x:Name="textBtnStartRename" Text="Start Rename File"></TextBlock>
                         <Button.ToolTip>
                             <ToolTip Content="Start Rename"/>
                         </Button.ToolTip>
                     </Button>
-                    <Button Grid.Column="2"  Width="100" Height="30" Margin="0,4,0,4" Background="white" BorderThickness="2" 
+                    <Button Grid.Column="2"  Width="100" Height="30" Margin="0,4,0,4" Background="white" BorderThickness="1" 
                              Click="deleteAllFile" DockPanel.Dock="Right"
                              Foreground="#235295" FontSize="15">
-                        Delete all file
+                        <TextBlock x:Name="deleteAllfile" Text="Delete all file"></TextBlock>
                         <Button.ToolTip>
                             <ToolTip Content="Stop Rename"/>
                         </Button.ToolTip>
                     </Button>
                     <Button Grid.Column="1"  Width="70" Height="30" Margin="0,4,0,4" Background="white" BorderThickness="2" 
-                             Click="resetAllFile" DockPanel.Dock="Right"
+                             Click="resetAllFile" DockPanel.Dock="Right" Visibility="Collapsed"
                              Foreground="#235295" FontSize="15">
                         Reset
                         <Button.ToolTip>
@@ -567,7 +568,7 @@
                     </Button>
                     <ProgressBar x:Name="ProgressButton" IsIndeterminate="True" Opacity="0.5" Margin="0" Visibility="Hidden"/>
                 </WrapPanel>
-                
+
                 <TabControl Grid.Row="0" Grid.Column="1" FontSize="15" SelectionChanged="TabControl_SelectionChanged" >
                     <TabItem Header="Rename Files" Height="35" FontSize="20" Name="Tab1">
                         <Grid>
@@ -577,7 +578,7 @@
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="235">
-                                    
+
                                 </ColumnDefinition>
                                 <ColumnDefinition Width="*"></ColumnDefinition>
 
@@ -635,8 +636,8 @@
                             </StackPanel>
                             <ListView x:Name="FilesListView" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"  FontSize="15">
                                 <!--Background="#f7d3ba"-->
-                              
-                              <ListView.View>
+
+                                <ListView.View>
                                     <GridView>
                                         <GridViewColumn Header="Stt" Width="30" DisplayMemberBinding="{Binding Stt}"/>
                                         <GridViewColumn Header="Filename" Width="150" DisplayMemberBinding="{Binding Filename}"/>
@@ -646,9 +647,9 @@
                                         <GridViewColumn Header="Status" Width="45"  DisplayMemberBinding="{Binding Status}"/>
                                     </GridView>
                                 </ListView.View>
-                             
-                                
-                            </ListView> 
+
+
+                            </ListView>
                         </Grid>
                     </TabItem>
                     <TabItem Header="Rename Folders" Height="35" FontSize="20">

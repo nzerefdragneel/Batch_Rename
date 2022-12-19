@@ -21,6 +21,9 @@ using Path = System.IO.Path;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.ComponentModel;
+using System.Drawing;
+using Brush = System.Windows.Media.Brush;
+using System.Xml.Linq;
 
 namespace Batch_Rename
 {
@@ -44,6 +47,7 @@ namespace Batch_Rename
             public double top { get; set;}
         }
         string tab_control;
+        FrameworkElement isSelectedRule = null;
         ObservableCollection<string> _nodigits = new ObservableCollection<string>();
 
         static Dictionary<string, IRule> _prototypes = new Dictionary<string, IRule>();
@@ -82,11 +86,9 @@ namespace Batch_Rename
         ObservableCollection<string> _nameRuleReset = new ObservableCollection<String>() { "All" };
         private void LoadRuleFromFile()
         {
-           Debug.WriteLine("rule+++++++++++++++++++++++++++++++++++++");
+          
             var exeFolder = AppDomain.CurrentDomain.BaseDirectory;
-            Debug.WriteLine("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-            Debug.WriteLine(exeFolder);
-            Debug.WriteLine("__________*********************************");
+          
             var folderInfo = new DirectoryInfo(exeFolder);
             var dllFiles = folderInfo.GetFiles("*.dll");
             foreach (var file in dllFiles)
@@ -386,7 +388,7 @@ namespace Batch_Rename
                         int n = _folderList.Count;
                         var file = new FolderIOS()
                         {
-                            Stt = n,
+                            Stt = n+1,
                             Filename = filename,
                             NewFilename = filename,
                             Pathname = path,
@@ -448,7 +450,6 @@ namespace Batch_Rename
                     {
                         if (_resetrules[i].Name == rule.Name)
                         {
-                            Debug.WriteLine(ruledelete);
                             _resetrules.Remove(_resetrules[i]);
                             
                             _resetrules.Add(rule);
@@ -512,7 +513,7 @@ namespace Batch_Rename
                     foreach (var rule in rules)
                     {
 
-                        Debug.WriteLine(rule.Name);
+                     
                         _fileList[i].NewFilename = rule?.Rename(_fileList[i].NewFilename, "File")!;
                     }
                      
@@ -537,11 +538,7 @@ namespace Batch_Rename
                 }
             }
         }
-        private void ChangeExtension_mouseDown(object sender, MouseButtonEventArgs e)
-        {
-
-        }
-
+     
         private void _textboxReplace_TextChanged(object sender, TextChangedEventArgs e)
         {
             var parent = ((System.Windows.Controls.TextBox)sender);
@@ -664,7 +661,7 @@ namespace Batch_Rename
                 int number;
                 if (Tab1.IsSelected)
                 {
-                    number = (int)(Math.Round(Math.Log10(_fileList.Count + 1)) + 1);
+                    number = (int)(Math.Round(Math.Log10(_fileList.Count + 1)+0.5));
                     _nodigits.Clear();
                     for (int i = number; i < 9; i++)
                     {
@@ -674,7 +671,7 @@ namespace Batch_Rename
 
                 else
                 {
-                    number = (int)(Math.Round(Math.Log10(_folderList.Count + 1)) + 1);
+                    number = (int)(Math.Round(Math.Log10(_folderList.Count + 1)+0.5));
                     _nodigits.Clear();
                     for (int i = number; i < 9; i++)
                     {
@@ -715,20 +712,20 @@ namespace Batch_Rename
                     if (rule.Name == "AddCounter") rule.reset();
                     newName = rule?.Rename(newName, "File")!;
                 }
-                Debug.WriteLine(newName);
+            
                 _fileList[i].NewFilename = newName;
             }
         }
         private void reviewFile_folderNamebyOneRule(IRule? rule)
         {
-            Debug.WriteLine(rule.Name.ToString());
+          
             if (rule.Name == "AddCounter") rule.reset();
             if (Tab1.IsSelected)
             {
                 
                 for (int i = 0; i < _fileList.Count; i++)
                 {
-                    Debug.WriteLine(rule.Name);
+                  
                     string newName = _fileList[i].NewFilename;
                     newName = rule?.Rename(newName, "File")!;
                     _fileList[i].NewFilename = newName;
@@ -747,7 +744,6 @@ namespace Batch_Rename
         private void previewAfterAddRule(string line)
         {
             var rule = RuleFactory.Instance().Parse(line);
-            Debug.WriteLine(line);
             if (rule!=null )
             {
               
@@ -900,6 +896,7 @@ namespace Batch_Rename
              processbar.Value = e.ProgressPercentage;
             Debug.WriteLine(processbar.Value.ToString());
         }
+       
         private void StartRename(object sender, RoutedEventArgs e)
 
         {
@@ -923,8 +920,7 @@ namespace Batch_Rename
             backgroundWorker.ProgressChanged += new ProgressChangedEventHandler(backgroundWorker_ProgressChanged);
             var progress = new Progress<int>(x => processbar.Value = x);
             
-            if (Tab1.IsSelected)
-            {
+            
                 foreach (var file in _fileList)
                 {
                     index++;
@@ -943,9 +939,11 @@ namespace Batch_Rename
                             var patht = file.Pathname + "\\" + file.Filename;
                             if (File.Exists(patht))
                             {
+
                                 var newpathname = file.Pathname + "\\" + file.NewFilename;
                                 if (File.Exists(newpathname))
                                 {
+                                   
                                     var dulicate = 0;
                                     int indexofdots = file.NewFilename.LastIndexOf('.');
                                     string name = "", extension = "";
@@ -954,13 +952,28 @@ namespace Batch_Rename
                                         name = file.NewFilename.Substring(0, indexofdots);
                                         extension = file.NewFilename.Substring(indexofdots);
                                     }
+                                    Regex rx = new Regex("\\(\\d+\\)$");
+                                    var replaceChar = "";
+                                    var temp = "";
+                                    var newname = "";
                                     while (File.Exists(newpathname))
                                     {
                                         dulicate =dulicate+ 1;
-                                        newpathname = file.Pathname + "\\" + name + " (" + dulicate.ToString() + ")" + extension;
+                                        replaceChar = "(" + dulicate.ToString() + ")";
+                                        if (rx.IsMatch(name))
+                                        {
+                                            temp = rx.Replace(name,replaceChar);
+                                            newname = temp + extension;
+                                            newpathname = file.Pathname + "\\" + newname;
+                                        }
+                                        else
+                                        {
+                                            newname = name + " (" + dulicate.ToString() + ")" + extension;
+                                            newpathname = file.Pathname + "\\" +newname ;
+                                        }
                                     }
                                     File.Move(patht, newpathname);
-                                    file.Filename = name + " (" + dulicate.ToString() + ")" + extension;
+                                    file.Filename = newname;
                                     file.NewFilename = file.Filename;
                                     file.Status = "complete";
                                 }
@@ -1003,19 +1016,34 @@ namespace Batch_Rename
                                     name = file.NewFilename.Substring(0, indexofdots);
                                     extension = file.NewFilename.Substring(indexofdots);
                                 }
+                                Regex rx = new Regex("\\(\\d+\\)$");
+                                var replaceChar = "";
+                                var temp = "";
+                                string newname = string.Empty;
                                 while (File.Exists(newpathname))
                                 {
-                                    
-                                    dulicate += 1;
-                                    Debug.WriteLine(dulicate);
-                                    newpathname = newPath + "\\" + name + " (" + dulicate.ToString() + ")" + extension;
-                                    Debug.WriteLine(newpathname);
+                                   
+                                    dulicate = dulicate + 1;
+                                    replaceChar = "(" + dulicate.ToString() + ")";
+                                    if (rx.IsMatch(name))
+                                    {
+
+                                        temp = rx.Replace(name, replaceChar);
+                                        newname = temp + extension;
+                                        newpathname = newPath + "\\" + newname;
+                                    }
+                                    else
+                                    {
+                                        newname = name + " (" + dulicate.ToString() + ")" + extension;
+                                        newpathname = newPath + "\\" +newname ;
+                                    }
                                 }
-                                Debug.WriteLine(newpathname);
-                                Debug.WriteLine(dulicate);
+                             
                                 File.Copy(oldpath, newpathname);
-                                file.Filename = name + " (" + dulicate.ToString() + ")" + extension;
+                                //change!!!!
+                                file.Filename = newname;
                                 file.NewFilename = file.Filename;
+                                file.Pathname = newPath;
                                 file.Status = "handing duplicate";
 
                             }
@@ -1038,59 +1066,7 @@ namespace Batch_Rename
                     }
 
                 }
-            }
-            else
-            {
-
-                for (int i = _folderList.Count - 1; i >= 0; i--)
-                {
-                    var file = _folderList[i];
-                    var oldpath = file.Pathname + "\\" + file.Filename;
-                    var newpathname = file.Pathname + "\\" + file.NewFilename;
-                    if (Directory.Exists(oldpath))
-                    {
-                        if (Directory.Exists(newpathname))
-                        {
-                            //  MessageBox.Show(newpath + " exist");
-                            var dulicate = 0;
-                           
-                            while (Directory.Exists(newpathname))
-                            {
-                                dulicate += 1;
-                                newpathname = file.Pathname + "\\" + file.NewFilename + " (" + dulicate.ToString() + ")" ;
-                            }
-                            Directory.Move(oldpath, newpathname);
-                            file.Filename = file.NewFilename + " (" + dulicate.ToString() + ")" ;
-                            file.NewFilename = file.Filename;
-                            file.Status = "complete";
-                           
-                        }
-                        else
-                        {
-                            Directory.Move(oldpath, newpathname);
-                            var filereset = new FolderIOS()
-                            {
-                                Filename = file.NewFilename.ToString(),
-                                NewFilename = file.Filename.ToString(),
-                                Pathname = file.Pathname
-                            };
-                            _resetfolderList.Add(filereset);
-                            _folderList[i].Filename = file.NewFilename;
-                            _folderList[i].Status = "complete";
-
-                        }
-                    }
-                    else
-                    {
-                        //  MessageBox.Show(oldpath, "cant find");
-                        file.Status = "err";
-                        file.Error = "cant find path";
-                    }
-                }
-            }
-
            
-
             MessageBox.Show("All files have been renamed!");
             ControlRename.Visibility=Visibility.Collapsed;
             StartRenameGrid.Visibility = Visibility.Visible;
@@ -1111,10 +1087,23 @@ namespace Batch_Rename
 
         private void deleteAllFile(object sender, RoutedEventArgs e)
         {
-            _resetfileList = _fileList;
-            _fileList.Clear();
+           
+                _resetfileList = _fileList;
+                _fileList.Clear();
+          
+               
+            
         }
-        
+
+        private void deleteAllFolders(object sender, RoutedEventArgs e)
+        {
+
+            
+
+            _resetfolderList = _folderList;
+            _folderList.Clear();
+
+        }
         //chua xong
         private void resetAllFile(object sender, RoutedEventArgs e)
         {
@@ -1131,8 +1120,7 @@ namespace Batch_Rename
                 {
                     if (stoprename == false)
                     {
-                        Debug.WriteLine(file.Filename);
-                        Debug.WriteLine(file.NewFilename);
+                     
                         File.Move(file.Pathname + "\\" + file.Filename, file.Pathname + "\\" + file.NewFilename);
                         var filereset = new FileIOS()
                         {
@@ -1189,7 +1177,7 @@ namespace Batch_Rename
 
                 isCase = toPascalCase(isCase);
 
-                Debug.WriteLine(isCase);
+           
 
                 string keyword = "AddCase";
                 string nameRuleEdit = "AddCase";
@@ -1226,22 +1214,22 @@ namespace Batch_Rename
         private void ChangePathDefault(object sender, RoutedEventArgs e)
         {
             
-               
-            Direction_stackPannel.Visibility = Visibility.Collapsed;
-            DefaultAddress_stackPannel.Visibility = Visibility.Visible;
                 var dialog = new System.Windows.Forms.FolderBrowserDialog();
                 var result = dialog.ShowDialog();
 
                 if (System.Windows.Forms.DialogResult.OK == result)
                 {
                     newPath = dialog.SelectedPath;
-                path_address.Text = newPath;
+                    path_address.Text = newPath;
                     MessageBox.Show(newPath);
-                
-                }
+                Direction_stackPannel.Visibility = Visibility.Collapsed;
+                DefaultAddress_stackPannel.Visibility = Visibility.Visible;
 
-
+            }
            
+
+
+
         }
 
         private void changedefaultaddressbtn(object sender, RoutedEventArgs e)
@@ -1369,8 +1357,7 @@ namespace Batch_Rename
                         {
                             if (resetRule == _resetrules[i].Name)
                             {
-                                Debug.WriteLine(_resetrules[i].Name);
-                                Debug.WriteLine(isChoose);
+                               
                                 AddRuleReset(_resetrules[i], isChoose);
                             }
                         }
@@ -1387,8 +1374,7 @@ namespace Batch_Rename
                     {
                         if (resetRule == _resetrules[i].Name)
                         {
-                            Debug.WriteLine(_resetrules[i].Name);
-                            Debug.WriteLine(isChoose);
+                          
                             AddRuleReset(_resetrules[i], isChoose);
                         }
                     }
@@ -1424,42 +1410,84 @@ namespace Batch_Rename
             var inod = cmSelectNoDigits.SelectedIndex;
             var icase = cmbChooseType.SelectedIndex;
             var textStep = textboxStep.Text;
-            var step = Int32.Parse(textStep);
+            
+            var step = 0;
+            try
+            {
+                if (textStep != "") {
+               step=Int32.Parse(textStep);
+                }
+            }
+            catch 
+            {
+                MessageBox.Show("Please type number!");
+            }
+
             var textStart = textboxStartValue.Text;
-            var start = Int32.Parse(textStart);
+            var start = 0;
+            try
+            {
+                if (textStart!="")
+                start = Int32.Parse(textStart);
+            }
+            catch {
+                MessageBox.Show("Please type number!");
+            }
             var kind = cmbChooseType.SelectedIndex;
             string data;
             var numOfSize = _fileList.Count > _folderList.Count ? _fileList.Count : _folderList.Count;
+            string change = string.Empty;
             foreach (var rule in rules)
             {
                 if (rule.Name == "AddCounter")
                 {
-                    if (inod != -1) rule.EditRule("NoDigits?" + _nodigits[inod]+"?"+numOfSize.ToString());
+                    change="NumOfFile?" + numOfSize.ToString();
+                    if (inod != -1)
+                    {
+                        change = change + ":" + "NoDigits?" + _nodigits[inod] + "?" + numOfSize.ToString();
+                        //rule.EditRule("NoDigits?" + _nodigits[inod] + "?" + numOfSize.ToString()); 
+                    }
                     if (textStep != "")
                     {
-                        Debug.WriteLine("Step:", step);
-                        rule.EditRule("Step?" + textStep);
+                        change = change + ":" + "Step?" + textStep;
+                        //rule.EditRule("Step?" + textStep);
                     }
                     if (textStart != "")
                     {
                         data = "StartFile?" + textStart;
                         if (Tab1.IsSelected)
-                            rule.EditRule(data);
-                        else {
+                            change = change + ":" + data;
+                        //rule.EditRule(data);
+                        else
+                        {
                             data = "StartFolder?" + textStart;
-                            rule.EditRule(data);
+                            change = change + ":" + data;
+                            // rule.EditRule(data);
                         }
                     }
                     if (kind != -1)
                     {
-                        if (kind == 0) rule.EditRule("Kind?Pre");
-                        else rule.EditRule("Kind?Suf");
+                        if (kind == 0)
+                        {
+                            change = change + ":" + "Kind?Pre";
+                            //rule.EditRule("Kind?Pre");
+                        }
+                        else
+                        {
+                            change = change + ":" + "Kind?Suf";
+                            //  rule.EditRule("Kind?Suf"); }
+                        }
                     }
+              
+                    rule.EditRule(change);
                 }
-                break;
-            }
-            reviewAllruleChange();
 
+                    break;
+                
+            }
+
+                reviewAllruleChange();
+            
         }
 
         private void checkStep(object sender, TextChangedEventArgs e)
@@ -1508,6 +1536,165 @@ namespace Batch_Rename
                     MessageBox.Show("Type integer pls!");
                     textboxStartValue.Text = type.Substring(0, type.Length - 1);
                     }
+                }
+            }
+        }
+
+        private void ChangeExtension_mouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (isSelectedRule != null)
+            {
+                isSelectedRule.GetType().GetProperty("Background").SetValue(isSelectedRule, brushColorDefault);
+            }
+           isSelectedRule= (FrameworkElement)((System.Windows.Controls.StackPanel)sender);
+           Debug.WriteLine(isSelectedRule.GetType().ToString());
+           // var whatever = isSelectedRule.GetType().GetProperty("Background").GetValue(isSelectedRule);
+           isSelectedRule.GetType().GetProperty("Background").SetValue(isSelectedRule,brushColorSelect);
+
+
+        }
+
+        private void ChooseRuleIsUpToTop(object sender, RoutedEventArgs e)
+        {
+            if (isSelectedRule != null)
+            {
+                int currentSelectedIndex = ListRuleGroupBox.Children.IndexOf(isSelectedRule);
+                int upIndex = 0;
+                int childCount = ListRuleGroupBox.Children.Count;
+                    ListRuleGroupBox.Children.RemoveAt(currentSelectedIndex);
+                    ListRuleGroupBox.Children.Insert(upIndex,isSelectedRule);
+               
+                reviewAllruleChange();
+            }
+        }
+
+        private void ChooseRuleIsDownOne(object sender, RoutedEventArgs e)
+        {
+            if (isSelectedRule != null)
+            {
+                int currentSelectedIndex = ListRuleGroupBox.Children.IndexOf(isSelectedRule);
+                int downIndex = currentSelectedIndex + 1;
+                int childCount = ListRuleGroupBox.Children.Count;
+                if (downIndex < childCount)
+                {
+                    ListRuleGroupBox.Children.RemoveAt(currentSelectedIndex);
+                    ListRuleGroupBox.Children.Insert(downIndex, isSelectedRule);
+                }
+                else if (downIndex == childCount)
+                {
+                    ListRuleGroupBox.Children.RemoveAt(currentSelectedIndex);
+                    ListRuleGroupBox.Children.Insert(currentSelectedIndex, isSelectedRule);
+                }
+                reviewAllruleChange();
+            }
+        }
+
+        private void ChooseRuleIsUpOne(object sender, RoutedEventArgs e)
+        {
+            if (isSelectedRule != null)
+            {
+                int currentSelectedIndex = ListRuleGroupBox.Children.IndexOf(isSelectedRule);
+                int upIndex = currentSelectedIndex - 1;
+                int childCount = ListRuleGroupBox.Children.Count;
+                if (upIndex >= 0)
+                {
+                    ListRuleGroupBox.Children.RemoveAt(currentSelectedIndex);
+                    ListRuleGroupBox.Children.Insert(upIndex, isSelectedRule);
+                }
+                
+                reviewAllruleChange();
+            }
+        }
+
+        private void ChooseRuleIsDownAll(object sender, RoutedEventArgs e)
+        {
+            if (isSelectedRule != null)
+            {
+                int currentSelectedIndex = ListRuleGroupBox.Children.IndexOf(isSelectedRule);
+            
+                int childCount = ListRuleGroupBox.Children.Count;
+                ListRuleGroupBox.Children.RemoveAt(currentSelectedIndex);
+                ListRuleGroupBox.Children.Insert(childCount-1, isSelectedRule);
+                reviewAllruleChange();
+            }
+        }
+
+        private void StartRenameFolder(object sender, RoutedEventArgs e)
+        {
+            for (int i = 0; i<_folderList.Count; i++)
+            {
+                var file = _folderList[i];
+                var oldpath = file.Pathname + "\\" + file.Filename;
+                var newpathname = file.Pathname + "\\" + file.NewFilename;
+                if (Directory.Exists(oldpath))
+                {
+                    if (Directory.Exists(newpathname))
+                    {
+                        //  MessageBox.Show(newpath + " exist");
+                        var dulicate = 0;
+                        Regex rx = new Regex("\\(\\d+\\)$");
+                        var replaceChar = "";
+                        var temp = "";
+                        string newname = file.NewFilename;
+                        while (Directory.Exists(newpathname))
+                        {
+                            dulicate += 1;
+                            replaceChar = "(" + dulicate.ToString() + ")";
+                            if (rx.IsMatch(newname))
+                            {
+
+                                newname = rx.Replace(newname, replaceChar);
+                                newpathname = file.Pathname + "\\" + newname;
+                            }
+                            else
+                            {
+                                newname = newname + " (" + dulicate.ToString() + ")";
+                                newpathname = file.Pathname + "\\" + newname;
+                            }
+
+                        }
+                        Directory.Move(oldpath, newpathname);
+                        for (int j = 0; j < _fileList.Count; j++)
+                        {
+                            _fileList[j].Pathname = _fileList[j].Pathname.Replace(oldpath, newpathname);
+                        }
+                        for (int j = i + 1; j < _folderList.Count; j++)
+                        {
+                            _folderList[j].Pathname = _folderList[j].Pathname.Replace(oldpath, newpathname);
+                        }
+                        file.Filename = file.NewFilename + " (" + dulicate.ToString() + ")";
+                        file.NewFilename = file.Filename;
+                        file.Status = "complete";
+
+                    }
+                    else
+                    {
+                        Directory.Move(oldpath, newpathname);
+                        for (int j = 0; j < _fileList.Count; j++)
+                        {
+                            _fileList[j].Pathname = _fileList[j].Pathname.Replace(oldpath, newpathname);
+                        }
+                        for (int j = i + 1; j < _folderList.Count; j++)
+                        {
+                            _folderList[j].Pathname = _folderList[j].Pathname.Replace(oldpath, newpathname);
+                        }
+                        var filereset = new FolderIOS()
+                        {
+                            Filename = file.NewFilename.ToString(),
+                            NewFilename = file.Filename.ToString(),
+                            Pathname = file.Pathname
+                        };
+                        _resetfolderList.Add(filereset);
+                        _folderList[i].Filename = file.NewFilename;
+                        _folderList[i].Status = "complete";
+
+                    }
+                }
+                else
+                {
+                    //  MessageBox.Show(oldpath, "cant find");
+                    file.Status = "err";
+                    file.Error = "cant find path";
                 }
             }
         }

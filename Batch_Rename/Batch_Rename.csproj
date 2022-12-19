@@ -9,12 +9,16 @@
 
   <ItemGroup>
     <None Remove="Images\add.png" />
+    <None Remove="Images\arrow-up.png" />
     <None Remove="Images\down.png" />
     <None Remove="Images\DownColor.png" />
     <None Remove="Images\download.png" />
     <None Remove="Images\garbage.png" />
+    <None Remove="Images\left-down.png" />
+    <None Remove="Images\move-down.png" />
     <None Remove="Images\play-button.png" />
     <None Remove="Images\plus.png" />
+    <None Remove="Images\top-right.png" />
     <None Remove="Images\upload.png" />
   </ItemGroup>
 
@@ -41,6 +45,9 @@
     <Resource Include="Images\add.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Images\arrow-up.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Images\down.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -53,10 +60,28 @@
     <Resource Include="Images\garbage.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Images\left-down.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\move-down.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+	   <Resource Include="Images\move-up.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+	   <Resource Include="Images\move-to-top.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+	   <Resource Include="Images\move-to-bottom.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Images\play-button.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\plus.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\top-right.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\upload.png">

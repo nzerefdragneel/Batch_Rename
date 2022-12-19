@@ -14,69 +14,94 @@ namespace AddCounter
         public int CounterFile { get; set; }
         public int CounterFolder { get; set; }
         public string Name => "AddCounter";
-        public void EditRule(string data) {
-            var x = data.Split('?');
-            int dataParse;
-            
-            if (x[0] == "Kind"){ Kind = x[1]; Debug.WriteLine("Kind",Kind); }
-            if (x[0]=="Step")
+        public int NumOffile { get; set; }
+        public void EditRule(string dataChange)
+        {
+            var isChange = dataChange.Split(":");
+            foreach (var data in isChange)
             {
-                try
+              
+                if (!string.IsNullOrEmpty(data))
                 {
-                    dataParse = int.Parse(x[1]);
-                    Step = dataParse;
-                }
-                catch
-                {
-                    MessageBox.Show(x[0], "Data err!");
-                    return;
-                }
 
-            }
-           
-            if (x[0] == "StartFile") {
-                try
-                {
-                    dataParse = int.Parse(x[1]);
-                    CounterFile = dataParse; 
-                    StartValue = dataParse;
+                    var x = data.Split('?');
+                    int dataParse;
+
+                    if (x[0] == "Kind") { Kind = x[1]; }
+                    if (x[0] == "Step")
+                    {
+                        try
+                        {
+                            dataParse = int.Parse(x[1]);
+                            Step = dataParse;
+                        }
+                        catch
+                        {
+                            MessageBox.Show(x[0], "Data err!");
+                            return;
+                        }
+
+                    }
+                    if (x[0] == "NumOfFile")
+                    {
+                        try
+                        {
+                            dataParse = int.Parse(x[1]);
+                            NumOffile = dataParse;
+                        }
+                        catch
+                        {
+                            MessageBox.Show(x[0], "Data err!");
+                            return;
+                        }
+
+                    }
+                    if (x[0] == "StartFile")
+                    {
+                        try
+                        {
+                            dataParse = int.Parse(x[1]);
+                            CounterFile = dataParse;
+                            StartValue = dataParse;
+                        }
+                        catch
+                        {
+                            MessageBox.Show(x[0], "Data err!");
+                            return;
+                        }
+
+                    }
+                    if (x[0] == "StartFolder")
+                    {
+                        try
+                        {
+                            dataParse = int.Parse(x[1]);
+                            CounterFolder = dataParse;
+                            StartValue = dataParse;
+                        }
+                        catch
+                        {
+                            MessageBox.Show(x[0], "Data err!");
+                            return;
+                        }
+                    }
+                    if (x[0] == "NoDigits")
+                    {
+                        var num = int.Parse(x[2]);
+                        NoDigits = int.Parse(x[1]);
+                        NumOffile = num;
+                    }
                 }
-                catch
-                {
-                    MessageBox.Show(x[0], "Data err!");
-                    return;
-                }
-               
             }
-            if (x[0] == "StartFolder")
+            var suggestNum = (int)Math.Round(Math.Log10(StartValue + (NumOffile - 1) * Step) + 0.5);
+        
+            if (NoDigits < suggestNum)
             {
-                try
-                {
-                    dataParse = int.Parse(x[1]);
-                    CounterFolder = dataParse;
-                    StartValue = dataParse;
-                }
-                catch
-                {
-                    MessageBox.Show(x[0], "Data err!");
-                    return;
-                }
-            }
-            if (x[0] == "NoDigits")
-            {
-                var num = int.Parse(x[2]);
                
-                var suggestNum = (int)(Math.Round(Math.Log10(StartValue + (num-1) * Step)) + 1);
-                
-                NoDigits = int.Parse(x[1]);
-                if (NoDigits<suggestNum)
-                {
-                    NoDigits = suggestNum;
-                    string messageslabel= NoDigits.ToString()+ " Is to small, we suggest use "+suggestNum.ToString()+ " or you can change it?";
-                    MessageBox.Show(messageslabel);
-                }
+                string messageslabel = NoDigits.ToString() + " Is to small, we suggest use " + suggestNum.ToString() + " or you can change it?";
+                MessageBox.Show(messageslabel);
+                NoDigits = suggestNum;
             }
-            Debug.WriteLine(StartValue);
         }
      
         public object Clone()

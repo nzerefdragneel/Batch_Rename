@@ -51,7 +51,7 @@ namespace addCase
 
             AddCase result = new AddCase();
             result.caseName = "PascalCase";
-            Debug.WriteLine(GetCase());
+          
             return result;
         }
 
@@ -66,7 +66,7 @@ namespace addCase
                 extension = origin.Substring(index);
             }
             else name = origin;
-            Debug.WriteLine(caseName);
+       
             if (caseName == "PascalCase")
             {
                 Regex invalidCharsRgx = new Regex("[^_a-zA-Z0-9]");
@@ -76,6 +76,7 @@ namespace addCase
                 Regex lowerCaseNextToNumber = new Regex("(?<=[0-9])[a-z]");
                 Regex upperCaseInside = new Regex("(?<=[A-Z])[A-Z]+?((?=[A-Z][a-z])|(?=[0-9]))");
 
+               
                
                 var pascalCase = invalidCharsRgx.Replace(whiteSpace.Replace(name, "_"), string.Empty)
                     .Split(new char[] { '_' }, StringSplitOptions.RemoveEmptyEntries)

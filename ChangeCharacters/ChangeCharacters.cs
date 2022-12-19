@@ -58,8 +58,7 @@ namespace ChangeCharacters
             string namef = "", extension = "";
             if (index != -1 && type == "File")
             {
-                Debug.WriteLine(OldChar);
-                Debug.WriteLine(NewChar);
+              
                 namef = origin.Substring(0, index);
                 extension = origin.Substring(index);
                

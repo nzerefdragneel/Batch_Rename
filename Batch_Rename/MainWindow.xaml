@@ -12,6 +12,7 @@
     <Window.Resources>
 
         <ResourceDictionary>
+
             <Style x:Key="ScrollThumbs" TargetType="{x:Type Thumb}">
                 <Setter Property="Template">
                     <Setter.Value>
@@ -38,13 +39,13 @@
 
             <Style x:Key="{x:Type ScrollBar}" TargetType="{x:Type ScrollBar}">
                 <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
-                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="Foreground" Value="DarkGray"/>
                 <Setter Property="Background" Value="DarkGray"/>
                 <Setter Property="Width" Value="10"/>
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type ScrollBar}">
-                            <Grid x:Name="GridRoot" Width="12" Background="{x:Null}">
+                            <Grid x:Name="GridRoot" Width="5" Background="{x:Null}">
                                 <Track x:Name="PART_Track" Grid.Row="0" IsDirectionReversed="true" Focusable="False">
                                     <Track.Thumb>
                                         <Thumb x:Name="Thumb" Background="{TemplateBinding Foreground}" 
@@ -83,7 +84,7 @@
                                         </Setter.Value>
                                     </Setter>
                                     <Setter Property="Width" Value="Auto"/>
-                                    <Setter Property="Height" Value="12"/>
+                                    <Setter Property="Height" Value="5"/>
                                     <Setter TargetName="Thumb" Property="Tag" Value="Horizontal"/>
                                     <Setter TargetName="PageDown" Property="Command" Value="ScrollBar.PageLeftCommand"/>
                                     <Setter TargetName="PageUp" Property="Command" Value="ScrollBar.PageRightCommand"/>
@@ -97,20 +98,20 @@
     </Window.Resources>
     <DockPanel LastChildFill="True" Background="#235295">
 
-        <Grid DockPanel.Dock="Top">
+        <Grid DockPanel.Dock="Top" Visibility="Collapsed">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="147*"></ColumnDefinition>
-                <ColumnDefinition Width="703*"/>
+                <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="100"></ColumnDefinition>
                 <ColumnDefinition Width="50"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"></RowDefinition>
             </Grid.RowDefinitions>
-            <Label  Grid.Column="2" Grid.Row="0" Foreground="White" Height="35" FontSize="15" HorizontalAlignment="Center" Margin="0,8,0,8">Start Rename</Label>
+
+            <Label  Grid.Column="2" Grid.Row="0" Foreground="White" Height="35" FontSize="15" HorizontalAlignment="Center" Margin="0,8,0,8" Visibility="Collapsed">Start Rename</Label>
             <Button Grid.Column="3" Grid.Row="0"  Width="45"  Height="30" Margin="2,10,2,10" Background="Transparent"
                                         BorderThickness="0" Click="StartRename">
-                <Image Source="Images/play-button.png" RenderOptions.BitmapScalingMode="HighQuality" />
+                <Image Source="Images/play-button.png" RenderOptions.BitmapScalingMode="HighQuality" Visibility="Collapsed" />
                 <Button.ToolTip>
                     <ToolTip Content="Click to rename all file"/>
                 </Button.ToolTip>
@@ -126,12 +127,29 @@
                 </RowDefinition>
                 <RowDefinition Height="30"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="30"></RowDefinition>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="320"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
+            <StackPanel Grid.Row="3" Grid.Column="0" HorizontalAlignment="Right" Orientation="Horizontal">
+                <Button Grid.Column="1" Width="20" DockPanel.Dock="Right" Height="20" Margin="10,4,10,4" Background="Transparent" BorderThickness="0" Click="ChooseRuleIsUpToTop">
+                    <Image Source="Images/move-to-top.png" RenderOptions.BitmapScalingMode="HighQuality"/>
+                </Button>
+                <Button Grid.Column="1" Width="20" DockPanel.Dock="Right" Height="20" Margin="10,4,10,4" Background="Transparent" BorderThickness="0" Click="ChooseRuleIsDownOne">
+                    <Image Source="Images/move-down.png" RenderOptions.BitmapScalingMode="HighQuality"/>
+                </Button>
+                <Button Grid.Column="1" Width="20" DockPanel.Dock="Right" Height="20" Margin="10,4,10,4" Background="Transparent" BorderThickness="0" Click="ChooseRuleIsUpOne">
+                    <Image Source="Images/move-up.png" RenderOptions.BitmapScalingMode="HighQuality"/>
+                </Button>
+                <Button Grid.Column="1" Width="20" DockPanel.Dock="Right" Height="20" Margin="10,4,10,4" Background="Transparent" BorderThickness="0" Click="ChooseRuleIsDownAll">
+                    <Image Source="Images/move-to-bottom.png" RenderOptions.BitmapScalingMode="HighQuality"/>
+                </Button>
+
+            </StackPanel>
             <StackPanel Name="ControlChooseRule" Height="35" Background="#235295"  Orientation="Horizontal" Grid.Column="0" Grid.Row="0">
+                <TextBlock Text="RULE" Margin="10 0 0 0" FontWeight="ExtraBold" VerticalAlignment="Center" Foreground="White"></TextBlock>
                 <Fluent:ComboBox x:Name="cmbChooseRule"  Width="151"  
                            Text="Choose rule" Height="24" IsReadOnly="True" Foreground="#235295">
                     <Fluent:ComboBox.ItemTemplate>
@@ -143,21 +161,14 @@
                     </Fluent:ComboBox.ItemTemplate>
                 </Fluent:ComboBox>
                 <Button Grid.Column="1" Width="20" DockPanel.Dock="Right" Height="20" Margin="10,4,10,4" Background="Transparent" BorderThickness="0"
-                        Click="btnChooseRule">
+                        Click="btnChooseRule" ToolTip="Click to add new rule">
                     <Image Source="Images/plus.png" RenderOptions.BitmapScalingMode="HighQuality"/>
                 </Button>
-                <Button Grid.Column="1" Width="20" DockPanel.Dock="Right" Height="20" Margin="10,4,10,4" Background="Transparent" BorderThickness="0" Click="ChooseRuleIsDown">
-                    <Image Source="Images/download.png" RenderOptions.BitmapScalingMode="HighQuality"/>
-                </Button>
-                <Button Grid.Column="1" Width="20" DockPanel.Dock="Right" Height="20" Margin="10,4,10,4" Background="Transparent" BorderThickness="0" >
-                    <Image Source="Images/DownColor.png" RenderOptions.BitmapScalingMode="HighQuality"/>
-                </Button>
-                <Button Grid.Column="1" Width="20" DockPanel.Dock="Right" Height="20" Margin="10,4,10,4" Background="Transparent" BorderThickness="0" >
-                    <Image Source="Images/download.png" RenderOptions.BitmapScalingMode="HighQuality"/>
-                </Button>
+
+
             </StackPanel>
             <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
-
+                <TextBlock Text="RESET RULE" Margin="10 0 0 0" FontWeight="ExtraBold" VerticalAlignment="Center" Foreground="White"></TextBlock>
                 <Fluent:ComboBox x:Name="cmbChoosePreset"  Width="151"  Margin="0 10 0 0"
                          Background="#235295" Foreground="#235295" Text="Choose reset rule" Height="20" IsReadOnly="True">
                     <Fluent:ComboBox.ItemTemplate>
@@ -169,7 +180,7 @@
                     </Fluent:ComboBox.ItemTemplate>
                 </Fluent:ComboBox>
                 <Button Grid.Column="1" Width="20" DockPanel.Dock="Right" Height="20" Margin="10,4,10,4" Background="Transparent" BorderThickness="0" 
-                        Click="btnResetRule">
+                        Click="btnResetRule" ToolTip="Click to add old rule">
                     <Image Source="Images/plus.png" RenderOptions.BitmapScalingMode="HighQuality"/>
                 </Button>
             </StackPanel>
@@ -196,13 +207,13 @@
                             <Button Grid.Column="2" Width="20" Height="20" Margin="0,5,0,5" Background="Transparent" BorderThickness="0" Click="EditChangeExtension" >
                                 <Image Source="Images/download.png" RenderOptions.BitmapScalingMode="HighQuality"/>
                                 <Button.ToolTip>
-                                    <ToolTip Content="Move Rule To Bottom"/>
+                                    <ToolTip Content="Click to edit"/>
                                 </Button.ToolTip>
                             </Button>
                             <Button Grid.Column="1" Width="20" Height="20" Margin="5,5,5,5" Background="Transparent" BorderThickness="0" Click="deleteRule" >
                                 <Image Source="Images/garbage.png" RenderOptions.BitmapScalingMode="HighQuality"/>
                                 <Button.ToolTip>
-                                    <ToolTip Content="Move Rule To Bottom"/>
+                                    <ToolTip Content="Click to delete this rule"/>
                                 </Button.ToolTip>
                             </Button>
 
@@ -244,13 +255,13 @@
                             <Button Grid.Column="2" Width="20" DockPanel.Dock="Right" Height="20" Margin="0,4,0,4" Background="Transparent" BorderThickness="0" Click="EditaddCase">
                                 <Image Source="Images/download.png" RenderOptions.BitmapScalingMode="HighQuality"/>
                                 <Button.ToolTip>
-                                    <ToolTip Content="Move Rule To Bottom"/>
+                                    <ToolTip Content="Click to edit"/>
                                 </Button.ToolTip>
                             </Button>
                             <Button Grid.Column="1" Width="20" DockPanel.Dock="Right" Height="20" Margin="0,4,0,4" Background="Transparent" BorderThickness="0" Click="deleteRule">
                                 <Image Source="Images/garbage.png" RenderOptions.BitmapScalingMode="HighQuality"/>
                                 <Button.ToolTip>
-                                    <ToolTip Content="Move Rule To Bottom"/>
+                                    <ToolTip Content="Click to delete this rule"/>
                                 </Button.ToolTip>
                             </Button>
 
@@ -286,13 +297,13 @@
                                 Click="EditaddCounter" >
                                 <Image Source="Images/download.png" RenderOptions.BitmapScalingMode="HighQuality"/>
                                 <Button.ToolTip>
-                                    <ToolTip Content="Move Rule To Bottom"/>
+                                    <ToolTip Content="Click to edit"/>
                                 </Button.ToolTip>
                             </Button>
                             <Button Grid.Column="1" Width="20" DockPanel.Dock="Right" Height="20" Margin="0,4,0,4" Background="Transparent" BorderThickness="0" Click="deleteRule">
                                 <Image Source="Images/garbage.png" RenderOptions.BitmapScalingMode="HighQuality"/>
                                 <Button.ToolTip>
-                                    <ToolTip Content="Move Rule To Bottom"/>
+                                    <ToolTip Content="Click to delete this rule"/>
                                 </Button.ToolTip>
                             </Button>
 
@@ -366,7 +377,7 @@
                             <Button Grid.Column="1" Width="20" DockPanel.Dock="Right" Height="20" Margin="0,4,0,4" Background="Transparent" BorderThickness="0" Click="deleteRule">
                                 <Image Source="Images/garbage.png" RenderOptions.BitmapScalingMode="HighQuality"/>
                                 <Button.ToolTip>
-                                    <ToolTip Content="Move Rule To Bottom"/>
+                                    <ToolTip Content="Click to delete this rule"/>
                                 </Button.ToolTip>
                             </Button>
 
@@ -390,13 +401,13 @@
                             <Button Grid.Column="2" Width="20" DockPanel.Dock="Right" Height="20" Margin="0,4,0,4" Background="Transparent" BorderThickness="0" Click="EditAddPredix">
                                 <Image Source="Images/download.png" RenderOptions.BitmapScalingMode="HighQuality"/>
                                 <Button.ToolTip>
-                                    <ToolTip Content="Move Rule To Bottom"/>
+                                    <ToolTip Content="Click to edit"/>
                                 </Button.ToolTip>
                             </Button>
                             <Button Grid.Column="1" Width="20" DockPanel.Dock="Right" Height="20" Margin="0,4,0,4" Background="Transparent" BorderThickness="0" Click="deleteRule">
                                 <Image Source="Images/garbage.png" RenderOptions.BitmapScalingMode="HighQuality"/>
                                 <Button.ToolTip>
-                                    <ToolTip Content="Move Rule To Bottom"/>
+                                    <ToolTip Content="Click to delete this rule"/>
                                 </Button.ToolTip>
                             </Button>
                         </Grid>
@@ -426,19 +437,19 @@
                             <Button Grid.Column="2" Width="20" DockPanel.Dock="Right" Height="20" Margin="0,4,0,4" Background="Transparent" BorderThickness="0" Click="EditChangeCharacters">
                                 <Image Source="Images/download.png" RenderOptions.BitmapScalingMode="HighQuality"/>
                                 <Button.ToolTip>
-                                    <ToolTip Content="Move Rule To Bottom"/>
+                                    <ToolTip Content="Click to edit"/>
                                 </Button.ToolTip>
                             </Button>
                             <Button Grid.Column="1" Width="20" DockPanel.Dock="Right" Height="20" Margin="0,4,0,4" Background="Transparent" BorderThickness="0" Click="deleteRule">
                                 <Image Source="Images/garbage.png" RenderOptions.BitmapScalingMode="HighQuality"/>
                                 <Button.ToolTip>
-                                    <ToolTip Content="Move Rule To Bottom"/>
+                                    <ToolTip Content="Click to delete this rule"/>
                                 </Button.ToolTip>
                             </Button>
                         </Grid>
 
 
-                        <DockPanel x:Name="editOldCharacter"  Height="100" Grid.ColumnSpan="3" Margin="10 0 0 0" 
+                        <DockPanel x:Name="editOldCharacter"  Height="100" Grid.ColumnSpan="3" Margin="10 0 10 0" 
                                    Visibility="Visible">
                             <Grid>
 
@@ -482,18 +493,18 @@
                             <Button Grid.Column="2" Width="20" DockPanel.Dock="Right" Height="20" Margin="0,4,0,4" Background="Transparent" BorderThickness="0" Click="EditAddSuffix">
                                 <Image Source="Images/download.png" RenderOptions.BitmapScalingMode="HighQuality"/>
                                 <Button.ToolTip>
-                                    <ToolTip Content="Move Rule To Bottom"/>
+                                    <ToolTip Content="Click to edit"/>
                                 </Button.ToolTip>
                             </Button>
                             <Button Grid.Column="1" Width="20" DockPanel.Dock="Right" Height="20" Margin="0,4,0,4" Background="Transparent" BorderThickness="0" Click="deleteRule">
                                 <Image Source="Images/garbage.png" RenderOptions.BitmapScalingMode="HighQuality"/>
                                 <Button.ToolTip>
-                                    <ToolTip Content="Move Rule To Bottom"/>
+                                    <ToolTip Content="Click to delete this rule"/>
                                 </Button.ToolTip>
                             </Button>
                         </Grid>
 
-                        <DockPanel x:Name="editAddSuffix" Grid.ColumnSpan="3" Margin="10 0 0 0" Grid.Row="1" Visibility="Visible">
+                        <DockPanel x:Name="editAddSuffix" Grid.ColumnSpan="3" Margin="10 0 10 0" Grid.Row="1" Visibility="Visible">
                             <TextBlock Text="Suffix" Margin="15 0 10 10" FontSize="15" Foreground="white" Height="26"></TextBlock>
                             <TextBox Name="textboxAddsuffix" Height="22" Margin="0,0,20,0" 
                                 HorizontalContentAlignment="Right" Foreground="White"
@@ -517,7 +528,7 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <Grid Name="StartRenameGrid" Grid.Row="1" Grid.Column="0" Visibility="Visible">
+                <Grid Name="StartRenameGrid" Grid.Row="1" Grid.Column="0" Visibility="Collapsed">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"></RowDefinition>
                     </Grid.RowDefinitions>
@@ -541,9 +552,6 @@
                              Click="deleteAllFile" DockPanel.Dock="Right"
                              Foreground="#235295" FontSize="15">
                         <TextBlock x:Name="deleteAllfile" Text="Delete all file"></TextBlock>
-                        <Button.ToolTip>
-                            <ToolTip Content="Stop Rename"/>
-                        </Button.ToolTip>
                     </Button>
                     <Button Grid.Column="1"  Width="70" Height="30" Margin="0,4,0,4" Background="white" BorderThickness="2" 
                              Click="resetAllFile" DockPanel.Dock="Right" Visibility="Collapsed"
@@ -569,20 +577,36 @@
                     <ProgressBar x:Name="ProgressButton" IsIndeterminate="True" Opacity="0.5" Margin="0" Visibility="Hidden"/>
                 </WrapPanel>
 
-                <TabControl Grid.Row="0" Grid.Column="1" FontSize="15" SelectionChanged="TabControl_SelectionChanged" >
+                <TabControl Grid.Row="0" Grid.RowSpan="2" FontSize="15" SelectionChanged="TabControl_SelectionChanged" Margin="0,0,0,-28" >
                     <TabItem Header="Rename Files" Height="35" FontSize="20" Name="Tab1">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="35"></RowDefinition>
                                 <RowDefinition Height="*"/>
+                                <RowDefinition Height="35"></RowDefinition>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="235">
-
                                 </ColumnDefinition>
                                 <ColumnDefinition Width="*"></ColumnDefinition>
 
                             </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.ColumnSpan="3">
+                                <Button   Width="100" Height="30" Margin="0,4,0,4" Background="white" BorderThickness="1" 
+                             Foreground="#235295" FontSize="15" Click="deleteAllFile">
+                                    <TextBlock  Text="Delete all file"></TextBlock>
+                                </Button>
+                                <Button  Height="30" Margin="21,5,15,5" Background="#235295" BorderThickness="0" 
+                             Click="StartRename" 
+                             Foreground="White" FontSize="15">
+                                    <TextBlock Text="Start Rename File" ></TextBlock>
+                                    <Button.ToolTip>
+                                        <ToolTip Content="Start Rename"/>
+                                    </Button.ToolTip>
+                                </Button>
+
+
+                            </StackPanel>
                             <DockPanel x:Name="Direction_stackPannel" HorizontalAlignment="Center" Grid.Column="1">
                                 <Button  Width="120" Height="30" Margin="10,4,0,4" Background="#235295" BorderThickness="2" 
                              Click="ChangePathDefault" DockPanel.Dock="Left"
@@ -657,10 +681,27 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="35"></RowDefinition>
                                 <RowDefinition Height="*"></RowDefinition>
+                                <RowDefinition Height="35"></RowDefinition>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.ColumnSpan="3">
+                                <Button   Width="150" Height="30" Margin="0,4,0,4" Background="white" BorderThickness="1" 
+                             Foreground="#235295" FontSize="15" Click="deleteAllFolders">
+                                    <TextBlock  Text="Delete all folders" ></TextBlock>
+                                </Button>
+                                <Button  Height="30" Margin="21,5,15,5" Background="#235295" BorderThickness="0" 
+                             Click="StartRenameFolder" 
+                             Foreground="White" FontSize="15">
+                                    <TextBlock Text="Start Rename Folders" ></TextBlock>
+                                    <Button.ToolTip>
+                                        <ToolTip Content="Start Rename"/>
+                                    </Button.ToolTip>
+                                </Button>
+
+
+                            </StackPanel>
                             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0">
                                 <Fluent:ComboBox x:Name="cmbAddFolder"  Width="200"  
                                 Background="#235295" Foreground="#235295" Text="Select type" Height="35">

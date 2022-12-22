@@ -33,8 +33,6 @@ namespace Batch_Rename
     /// 
     public partial class MainWindow : RibbonWindow
     {
-
-       
         public MainWindow()
         {
             InitializeComponent();
@@ -913,21 +911,22 @@ namespace Batch_Rename
               }*/
             var max = _fileList.Count + 1;
             
-            int index = 0;
-            processbar.Maximum=max;
-            var backgroundWorker = new  BackgroundWorker();
-            backgroundWorker.WorkerReportsProgress= true;
-            backgroundWorker.ProgressChanged += new ProgressChangedEventHandler(backgroundWorker_ProgressChanged);
-            var progress = new Progress<int>(x => processbar.Value = x);
+            //int index = 0;
+            //processbar.Maximum=max;
+            //var backgroundWorker = new  BackgroundWorker();
+            //backgroundWorker.WorkerReportsProgress= true;
+            //backgroundWorker.ProgressChanged += new ProgressChangedEventHandler(backgroundWorker_ProgressChanged);
+            //var progress = new Progress<int>(x => processbar.Value = x);
             
             
                 foreach (var file in _fileList)
                 {
-                    index++;
-
-                    backgroundWorker.ReportProgress(index );
-                    
-
+                //index++;
+                //backgroundWorker.ReportProgress(index );
+                    if (file.NewFilename.Length > 255)
+                        {
+                            file.Error = "Newname too long";
+                        }
                     if (newPath == "")
                     {
                         if (file.NewFilename == file.Filename)
@@ -1435,7 +1434,7 @@ namespace Batch_Rename
             }
             var kind = cmbChooseType.SelectedIndex;
             string data;
-            var numOfSize = _fileList.Count > _folderList.Count ? _fileList.Count : _folderList.Count;
+            var numOfSize = Tab1.IsSelected ? _fileList.Count : _folderList.Count;
             string change = string.Empty;
             foreach (var rule in rules)
             {
@@ -1624,6 +1623,11 @@ namespace Batch_Rename
             for (int i = 0; i<_folderList.Count; i++)
             {
                 var file = _folderList[i];
+                if (file.NewFilename.Length > 255)
+                {
+                    _folderList[i].Error = "Newname is too long";
+                    continue;
+                }
                 var oldpath = file.Pathname + "\\" + file.Filename;
                 var newpathname = file.Pathname + "\\" + file.NewFilename;
                 if (Directory.Exists(oldpath))
@@ -1696,6 +1700,124 @@ namespace Batch_Rename
                     file.Status = "err";
                     file.Error = "cant find path";
                 }
+            }
+        }
+
+        private void ChooseRuleIsUpToTopFile(object sender, RoutedEventArgs e)
+        {
+            var index = -1;
+            if (Tab1.IsSelected)
+            {
+                index = FilesListView.SelectedIndex;
+                if (index != -1)
+                {
+                    int upIndex = 0;
+                    int childCount = _fileList.Count();
+                    _fileList.Insert(upIndex, _fileList[index]);
+                    _fileList.RemoveAt(index+1);
+                    reviewAllruleChange();
+                }
+            }
+            else { 
+                index = FoldersListView.SelectedIndex;
+                int upIndex = 0;
+                if (index == -1) return;
+                int childCount = _folderList.Count();
+                _folderList.Insert(upIndex,_folderList[index]);
+                _folderList.RemoveAt(index + 1);
+                reviewAllruleChange();
+            }
+            
+        }
+
+        private void ChooseRuleIsUpOneFile(object sender, RoutedEventArgs e)
+        {
+            var index = -1;
+            if (Tab1.IsSelected)
+            {
+                index = FilesListView.SelectedIndex;
+                if (index <= 0) return;
+                if (index != -1)
+                {
+                    int childCount = _fileList.Count();
+                    int downIndex = index - 1 ;
+                    _fileList.Insert(downIndex, _fileList[index]);
+                    _fileList.RemoveAt(index+1);
+                    reviewAllruleChange();
+                }
+            }
+            else
+            {
+                index = FoldersListView.SelectedIndex;
+                if (index <= 0) return;
+                int upIndex = index-1;
+                _folderList.Insert(upIndex, _folderList[index]);
+                _folderList.RemoveAt(index+1);
+                reviewAllruleChange();
+            }
+        }
+
+        private void ChooseRuleIsDownOneFile(object sender, RoutedEventArgs e)
+        {
+            var index = -1;
+            if (Tab1.IsSelected)
+            {
+                index = FilesListView.SelectedIndex;
+                if (index != -1)
+                {
+                    int childCount = _fileList.Count();
+                    if (index >=childCount-1) return;
+                    int downIndex = index + 1;
+                    FileIOS file = _fileList[index];
+
+                    _fileList.RemoveAt(index);
+                    _fileList.Insert(downIndex, file);
+                    reviewAllruleChange();
+                }
+            }
+            else
+            {
+                index = FoldersListView.SelectedIndex;
+                if (index < 0) return;
+                if (index >= _folderList.Count - 1) return;
+                int upIndex = index + 1;
+                FolderIOS folder = _folderList[index];
+
+                _folderList.RemoveAt(index);
+                _folderList.Insert(upIndex, folder);
+                reviewAllruleChange();
+            }
+        }
+
+        private void ChooseRuleIsDownAllFile(object sender, RoutedEventArgs e)
+        {
+            var index = -1;
+            if (Tab1.IsSelected)
+            {
+                index = FilesListView.SelectedIndex;
+
+                if (index != -1)
+                {
+                    int childCount = _fileList.Count();
+                    if (index >= childCount - 1) return;
+                    int downIndex = index + 1;
+                    FileIOS file = _fileList[index];
+
+                    _fileList.RemoveAt(index);
+                    _fileList.Add(file);
+                    reviewAllruleChange();
+                }
+            }
+            else
+            {
+                index = FoldersListView.SelectedIndex;
+                if (index < 0) return;
+                if (index >= _folderList.Count - 1) return;
+                int upIndex = _folderList.Count-1;
+                FolderIOS folder = _folderList[index];
+                _folderList.RemoveAt(index);
+                _folderList.Add(folder);
+                reviewAllruleChange();
             }
         }
     }

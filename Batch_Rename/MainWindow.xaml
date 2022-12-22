@@ -224,7 +224,7 @@
                             <TextBox Name="tb_extension" Height="22" Margin="0,0,20,0"
                                 HorizontalContentAlignment="Right" Foreground="White"
                                 VerticalContentAlignment="Center"
-                                     Background="#235295" TextChanged="_textboxReplace_TextChanged"
+                                     Background="Transparent" TextChanged="_textboxReplace_TextChanged"
                                      />
 
                         </DockPanel>
@@ -309,7 +309,7 @@
 
 
                         </Grid>
-                        <StackPanel x:Name="editaddCounter" Grid.Row="1" Grid.ColumnSpan="3" Margin="10 0 0 0" Visibility="Collapsed">
+                        <StackPanel x:Name="editaddCounter" Grid.Row="1" Grid.ColumnSpan="3" Margin="10 0 0 0" Visibility="Visible">
                             <DockPanel Visibility="Visible">
                                 <TextBlock Text="Number off digits"  Margin="0 15 10 10" FontSize="15" Foreground="white" Height="26"></TextBlock>
                                 <Fluent:ComboBox x:Name="cmSelectNoDigits"    Margin="00,0,10,0"
@@ -336,7 +336,7 @@
                                 <TextBox Name="textboxStep" Height="22" Margin="0,0,20,0"
                                 HorizontalContentAlignment="Right" 
                                 VerticalContentAlignment="Center" Foreground="White"
-                                     Background="#235295" TextChanged="checkStep"
+                                     Background="Transparent" TextChanged="checkStep"
                                      />
                             </DockPanel>
                             <DockPanel>
@@ -344,7 +344,7 @@
                                 <TextBox Name="textboxStartValue" Height="22" Margin="0,0,20,0"
                                 HorizontalContentAlignment="Right" 
                                 VerticalContentAlignment="Center" Foreground="White"
-                                     Background="#235295" TextChanged="CheckStarValue"
+                                     Background="Transparent" TextChanged="CheckStarValue"
                                      />
                             </DockPanel>
                             <DockPanel>
@@ -417,7 +417,7 @@
                             <TextBox Name="textboxAddprefix" Height="22" Margin="0,0,20,0"
                                 HorizontalContentAlignment="Right"
                                 VerticalContentAlignment="Center" Foreground="White"
-                                     Background="#235295" TextChanged="_textboxReplace_TextChanged"
+                                     Background="Transparent" TextChanged="_textboxReplace_TextChanged"
                                      />
                         </DockPanel>
 
@@ -462,7 +462,7 @@
                                     <TextBox Name="textboxOldCharacter" Height="22" Margin="0,0,20,0"
                                 HorizontalContentAlignment="Right"
                                 VerticalContentAlignment="Center" Foreground="White"
-                                     Background="#235295" TextChanged="_textboxReplace_TextChanged"
+                                     Background="Transparent" TextChanged="_textboxReplace_TextChanged"
                                      />
                                 </DockPanel>
                                 <DockPanel Grid.Row="1">
@@ -470,7 +470,7 @@
                                     <TextBox Name="textboxNewCharacter" Height="22" Margin="0,0,20,0"
                                 HorizontalContentAlignment="Right"
                                 VerticalContentAlignment="Center" Foreground="White"
-                                     Background="#235295" TextChanged="_textboxReplace_TextChanged"
+                                     Background="Transparent" TextChanged="_textboxReplace_TextChanged"
                                      />
                                 </DockPanel>
                             </Grid>
@@ -509,7 +509,7 @@
                             <TextBox Name="textboxAddsuffix" Height="22" Margin="0,0,20,0" 
                                 HorizontalContentAlignment="Right" Foreground="White"
                                 VerticalContentAlignment="Center"
-                                     Background="#235295" TextChanged="_textboxReplace_TextChanged"
+                                     Background="Transparent" TextChanged="_textboxReplace_TextChanged"
                                      />
                         </DockPanel>
 
@@ -591,6 +591,21 @@
                                 <ColumnDefinition Width="*"></ColumnDefinition>
 
                             </Grid.ColumnDefinitions>
+                            <StackPanel  Grid.Row="2" HorizontalAlignment="Left" Orientation="Horizontal">
+                                <Button Grid.Column="1" Width="20" Height="20" Margin="10,4,10,4" Background="Transparent" BorderThickness="0" Click="ChooseRuleIsUpToTopFile">
+                                    <Image Source="Images/move-to-top.png" RenderOptions.BitmapScalingMode="HighQuality"/>
+                                </Button>
+                                <Button Grid.Column="1" Width="20" Height="20" Margin="10,4,10,4" Background="Transparent" BorderThickness="0" Click="ChooseRuleIsDownOneFile">
+                                    <Image Source="Images/move-down.png" RenderOptions.BitmapScalingMode="HighQuality"/>
+                                </Button>
+                                <Button Grid.Column="1" Width="20"  Height="20" Margin="10,4,10,4" Background="Transparent" BorderThickness="0" Click="ChooseRuleIsUpOneFile">
+                                    <Image Source="Images/move-up.png" RenderOptions.BitmapScalingMode="HighQuality"/>
+                                </Button>
+                                <Button Grid.Column="1" Width="20" Height="20" Margin="10,4,10,4" Background="Transparent" BorderThickness="0" Click="ChooseRuleIsDownAllFile">
+                                    <Image Source="Images/move-to-bottom.png" RenderOptions.BitmapScalingMode="HighQuality"/>
+                                </Button>
+
+                            </StackPanel>
                             <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.ColumnSpan="3">
                                 <Button   Width="100" Height="30" Margin="0,4,0,4" Background="white" BorderThickness="1" 
                              Foreground="#235295" FontSize="15" Click="deleteAllFile">
@@ -608,9 +623,9 @@
 
                             </StackPanel>
                             <DockPanel x:Name="Direction_stackPannel" HorizontalAlignment="Center" Grid.Column="1">
-                                <Button  Width="120" Height="30" Margin="10,4,0,4" Background="#235295" BorderThickness="2" 
+                                <Button  Width="145" Height="30" Margin="10,4,0,4" Background="#235295" BorderThickness="2" 
                              Click="ChangePathDefault" DockPanel.Dock="Left"
-                             Foreground="white" FontSize="15" DataContext="Choose Address" >
+                             Foreground="white" FontSize="15" DataContext="Choose Address to save the copy" >
                                     Choose Address
                                     <Button.ToolTip>
                                         <ToolTip Content="Click to choose address"/>
@@ -660,15 +675,14 @@
                             </StackPanel>
                             <ListView x:Name="FilesListView" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"  FontSize="15">
                                 <!--Background="#f7d3ba"-->
-
                                 <ListView.View>
                                     <GridView>
                                         <GridViewColumn Header="Stt" Width="30" DisplayMemberBinding="{Binding Stt}"/>
                                         <GridViewColumn Header="Filename" Width="150" DisplayMemberBinding="{Binding Filename}"/>
-                                        <GridViewColumn Header="New Filename" Width="150" DisplayMemberBinding="{Binding NewFilename}"/>
+                                        <GridViewColumn Header="New Filename" Width="200" DisplayMemberBinding="{Binding NewFilename}"/>
                                         <GridViewColumn Header="Path" Width="160" DisplayMemberBinding="{Binding Pathname}"/>
-                                        <GridViewColumn Header="Error" Width="50"  DisplayMemberBinding="{Binding Error}"/>
-                                        <GridViewColumn Header="Status" Width="45"  DisplayMemberBinding="{Binding Status}"/>
+                                        <GridViewColumn Header="Error" Width="60"  DisplayMemberBinding="{Binding Error}"/>
+                                        <GridViewColumn Header="Status" Width="60"  DisplayMemberBinding="{Binding Status}"/>
                                     </GridView>
                                 </ListView.View>
 
@@ -686,6 +700,21 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
+                            <StackPanel  Grid.Row="2" HorizontalAlignment="Left" Orientation="Horizontal">
+                                <Button Grid.Column="1" Width="20" Height="20" Margin="10,4,10,4" Background="Transparent" BorderThickness="0" Click="ChooseRuleIsUpToTopFile">
+                                    <Image Source="Images/move-to-top.png" RenderOptions.BitmapScalingMode="HighQuality"/>
+                                </Button>
+                                <Button Grid.Column="1" Width="20" Height="20" Margin="10,4,10,4" Background="Transparent" BorderThickness="0" Click="ChooseRuleIsDownOneFile">
+                                    <Image Source="Images/move-down.png" RenderOptions.BitmapScalingMode="HighQuality"/>
+                                </Button>
+                                <Button Grid.Column="1" Width="20"  Height="20" Margin="10,4,10,4" Background="Transparent" BorderThickness="0" Click="ChooseRuleIsUpOneFile">
+                                    <Image Source="Images/move-up.png" RenderOptions.BitmapScalingMode="HighQuality"/>
+                                </Button>
+                                <Button Grid.Column="1" Width="20" Height="20" Margin="10,4,10,4" Background="Transparent" BorderThickness="0" Click="ChooseRuleIsDownAllFile">
+                                    <Image Source="Images/move-to-bottom.png" RenderOptions.BitmapScalingMode="HighQuality"/>
+                                </Button>
+
+                            </StackPanel>
                             <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.ColumnSpan="3">
                                 <Button   Width="150" Height="30" Margin="0,4,0,4" Background="white" BorderThickness="1" 
                              Foreground="#235295" FontSize="15" Click="deleteAllFolders">
@@ -730,10 +759,10 @@
                                     <GridView>
                                         <GridViewColumn Header="Stt" Width="30" DisplayMemberBinding="{Binding Stt}"/>
                                         <GridViewColumn Header="Filename" Width="150" DisplayMemberBinding="{Binding Filename}"/>
-                                        <GridViewColumn Header="New Filename" Width="150" DisplayMemberBinding="{Binding NewFilename}"/>
+                                        <GridViewColumn Header="New Filename" Width="200" DisplayMemberBinding="{Binding NewFilename}"/>
                                         <GridViewColumn Header="Path" Width="160" DisplayMemberBinding="{Binding Pathname}"/>
-                                        <GridViewColumn Header="Error" Width="50"  DisplayMemberBinding="{Binding Error}"/>
-                                        <GridViewColumn Header="Status" Width="200"  DisplayMemberBinding="{Binding Status}"/>
+                                        <GridViewColumn Header="Error" Width="60"  DisplayMemberBinding="{Binding Error}"/>
+                                        <GridViewColumn Header="Status" Width="60"  DisplayMemberBinding="{Binding Status}"/>
                                     </GridView>
                                 </ListView.View>
                             </ListView>

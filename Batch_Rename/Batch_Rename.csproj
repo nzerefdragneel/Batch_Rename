@@ -42,51 +42,51 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Images\add.png">
+    <Content Include="Images\add.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\arrow-up.png">
+    </Content>
+    <Content Include="Images\arrow-up.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\down.png">
+    </Content>
+    <Content Include="Images\down.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\DownColor.png">
+    </Content>
+    <Content Include="Images\DownColor.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\download.png">
+    </Content>
+    <Content Include="Images\download.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\garbage.png">
+    </Content>
+    <Content Include="Images\garbage.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\left-down.png">
+    </Content>
+    <Content Include="Images\left-down.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\move-down.png">
+    </Content>
+    <Content Include="Images\move-down.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-	   <Resource Include="Images\move-up.png">
+    </Content>
+	   <Content Include="Images\move-up.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-	   <Resource Include="Images\move-to-top.png">
+    </Content>
+	   <Content Include="Images\move-to-top.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-	   <Resource Include="Images\move-to-bottom.png">
+    </Content>
+	   <Content Include="Images\move-to-bottom.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\play-button.png">
+    </Content>
+    <Content Include="Images\play-button.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\plus.png">
+    </Content>
+    <Content Include="Images\plus.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\top-right.png">
+    </Content>
+    <Content Include="Images\top-right.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\upload.png">
+    </Content>
+    <Content Include="Images\upload.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

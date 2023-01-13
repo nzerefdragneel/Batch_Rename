@@ -219,7 +219,7 @@
 
 
                         </Grid>
-                        <DockPanel x:Name="editChangeExtension" Grid.Row="1" Grid.ColumnSpan="3" Margin="10 0 0 0" Visibility="Visible">
+                        <DockPanel x:Name="editChangeExtension" Visibility="Visible" Grid.Row="1" Grid.ColumnSpan="3" Margin="10 0 0 0" >
                             <TextBlock Text="Replace" Margin="0 15 10 10" FontSize="15" Foreground="white" Height="26"></TextBlock>
                             <TextBox Name="tb_extension" Height="22" Margin="0,0,20,0"
                                 HorizontalContentAlignment="Right" Foreground="White"
@@ -281,7 +281,7 @@
                             </Fluent:ComboBox>
                         </DockPanel>
                     </StackPanel>
-                    <StackPanel x:Name="AddCounter" MouseDown="ChangeExtension_mouseDown" Margin="10">
+                    <StackPanel x:Name="AddCounter" MouseDown="ChangeExtension_mouseDown" Margin="10" >
                         <Grid Grid.Column="0" Grid.Row="1" >
                             <Grid.ColumnDefinitions >
                                 <ColumnDefinition Width="220"></ColumnDefinition>
@@ -292,7 +292,7 @@
                                 <RowDefinition Height="30"></RowDefinition>
 
                             </Grid.RowDefinitions>
-                            <TextBlock Text="Add Counter" DockPanel.Dock="Left" FontSize="20" Foreground="white" />
+                            <TextBlock Text="Add Counter"  DockPanel.Dock="Left" FontSize="20" Foreground="white" />
                             <Button Grid.Column="2" Width="20" DockPanel.Dock="Right" Height="20" Margin="0,4,0,4" Background="Transparent" BorderThickness="0" 
                                 Click="EditaddCounter" >
                                 <Image Source="Images/download.png" RenderOptions.BitmapScalingMode="HighQuality"/>
@@ -309,7 +309,7 @@
 
 
                         </Grid>
-                        <StackPanel x:Name="editaddCounter" Grid.Row="1" Grid.ColumnSpan="3" Margin="10 0 0 0" Visibility="Visible">
+                        <StackPanel x:Name="editaddCounter" Grid.Row="1" Grid.ColumnSpan="3" Margin="10 0 0 0" Visibility="Collapsed">
                             <DockPanel Visibility="Visible">
                                 <TextBlock Text="Number off digits"  Margin="0 15 10 10" FontSize="15" Foreground="white" Height="26"></TextBlock>
                                 <Fluent:ComboBox x:Name="cmSelectNoDigits"    Margin="00,0,10,0"

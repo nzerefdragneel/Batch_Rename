@@ -176,8 +176,6 @@ namespace Batch_Rename
             position? sourcePosition = JsonSerializer.Deserialize<position>(pos);
 
 
-              
-           
                 
                     if (sourcePosition != null)
                     {
@@ -931,7 +929,7 @@ namespace Batch_Rename
                     {
                         if (file.NewFilename == file.Filename)
                         {
-                            file.Status = "Nothing changes";
+                            file.Status = "Nothing change";
                         }
                         else
                         {
@@ -1479,13 +1477,14 @@ namespace Batch_Rename
                     }
               
                     rule.EditRule(change);
+                    Debug.WriteLine(change);
                 }
 
                     break;
                 
             }
 
-                reviewAllruleChange();
+            reviewAllruleChange();
             
         }
 
